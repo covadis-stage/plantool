@@ -1,0 +1,57 @@
+# ASP.NET Core & Visual Studio
+
+## Ignore build output
+bin/
+obj/
+out/
+
+## User-specific files
+.vscode/
+*.vs/
+*.user
+*.suo
+*.ntvs*
+*.njsproj
+*.sln.docstates
+*.sln.iml
+
+## Rider / JetBrains files
+.idea/
+*.sln.ide/
+*.sln.iml
+*.userprefs
+
+## Logs and database
+*.log
+logs/
+App_Data/
+*.sqlite
+*.db
+*.mdf
+*.ldf
+
+## Environment & config
+secrets.json
+appsettings.Development.json
+appsettings.Local.json
+appsettings.Test.json
+.env
+
+## Package management
+node_modules/
+packages/
+npm-debug.log
+yarn-error.log
+
+## Runtime generated files
+wwwroot/
+.DS_Store
+Thumbs.db
+
+## Docker
+docker-compose.override.yml
+.dockerignore
+
+## Azure DevOps specific
+.azure/
+.nuget/
