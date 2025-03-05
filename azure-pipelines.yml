@@ -26,12 +26,12 @@ steps:
 - task: Npm@1
   inputs:
     command: 'install'
-    workingDir: '/frontend/'
+    workingDir: 'frontend'
 
 - task: Npm@1
   inputs:
     command: 'custom'
-    workingDir: '/frontend/'
+    workingDir: 'frontend'
     customCommand: 'run build'
 
 - task: ArchiveFiles@2
