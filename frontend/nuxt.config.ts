@@ -4,8 +4,5 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   nitro: {
     preset: "azure",
-    output: {
-      serverDir: "../.output/server",
-    }
   }
 })
