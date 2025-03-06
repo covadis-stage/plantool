@@ -2,11 +2,10 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  
   nitro: {
     preset: "azure",
     output: {
-      serverDir: "../.output/server",
+      dir: "../.output"
     }
   }
 })
