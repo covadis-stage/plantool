@@ -1,0 +1,26 @@
+using Microsoft.EntityFrameworkCore;
+using plantool.Models;
+using plantool.Models.Configurations;
+
+namespace plantool;
+
+public class PlantoolDbContext : DbContext
+{
+    public PlantoolDbContext(DbContextOptions<PlantoolDbContext> options)
+        : base(options)
+    {
+    }
+
+    public DbSet<Project> Projects { get; set; }
+    public DbSet<ProjectActivity> Activities { get; set; }
+    public DbSet<ActivityType> ActivityTypes { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.ApplyConfiguration(new ProjectConfiguration());
+        modelBuilder.ApplyConfiguration(new ProjectActivityConfiguration());
+        modelBuilder.ApplyConfiguration(new ActivityTypeConfiguration());
+    }
+}
