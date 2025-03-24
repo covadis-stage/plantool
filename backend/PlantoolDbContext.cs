@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using plantool.Models;
+using plantool.Models.Entities;
 using plantool.Models.Configurations;
 
 namespace plantool;

@@ -1,4 +1,4 @@
-﻿namespace plantool.Models;
+﻿namespace plantool.Models.Entities;
 
 public class Project
 {

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using plantool.Models.Entities;
 
 namespace plantool.Models.Configurations;
 
