@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace plantool.Migrations
+namespace plantool.Data.Migrations
 {
     /// <inheritdoc />
     public partial class FixShadowProperty : Migration

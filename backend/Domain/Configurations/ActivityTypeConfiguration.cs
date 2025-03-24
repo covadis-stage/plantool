@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using plantool.Models.Entities;
+using plantool.Domain.Entities;
 
-namespace plantool.Models.Configurations;
+namespace plantool.Domain.Configurations;
 
 public class ActivityTypeConfiguration : IEntityTypeConfiguration<ActivityType>
 {

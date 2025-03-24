@@ -3,20 +3,16 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using plantool;
 
 #nullable disable
 
-namespace plantool.Migrations
+namespace plantool.Data.Migrations
 {
     [DbContext(typeof(PlantoolDbContext))]
-    [Migration("20250324091241_FixShadowProperty")]
-    partial class FixShadowProperty
+    partial class PlantoolDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,18 +21,16 @@ namespace plantool.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("plantool.Models.ActivityType", b =>
+            modelBuilder.Entity("plantool.Models.Entities.ActivityType", b =>
                 {
                     b.Property<string>("Code")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OperationShortText")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Code");
@@ -44,14 +38,13 @@ namespace plantool.Migrations
                     b.ToTable("ActivityTypes");
                 });
 
-            modelBuilder.Entity("plantool.Models.Network", b =>
+            modelBuilder.Entity("plantool.Models.Entities.Network", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ProjectId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
@@ -61,7 +54,7 @@ namespace plantool.Migrations
                     b.ToTable("Network");
                 });
 
-            modelBuilder.Entity("plantool.Models.Project", b =>
+            modelBuilder.Entity("plantool.Models.Entities.Project", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(50)
@@ -78,9 +71,9 @@ namespace plantool.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("plantool.Models.ProjectActivity", b =>
+            modelBuilder.Entity("plantool.Models.Entities.ProjectActivity", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("Key")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -88,7 +81,6 @@ namespace plantool.Migrations
                         .HasColumnType("time");
 
                     b.Property<string>("ActivityTypeCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<DateOnly?>("ActualFinishDate")
@@ -98,6 +90,9 @@ namespace plantool.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("GeneralRemark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateOnly?>("LatestFinishDate")
@@ -122,7 +117,7 @@ namespace plantool.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Key");
 
                     b.HasIndex("ActivityTypeCode");
 
@@ -131,18 +126,16 @@ namespace plantool.Migrations
                     b.ToTable("Activities");
                 });
 
-            modelBuilder.Entity("plantool.Models.WorkBreakdownStructure", b =>
+            modelBuilder.Entity("plantool.Models.Entities.WorkBreakdownStructure", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("NetworkId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Type")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -152,26 +145,22 @@ namespace plantool.Migrations
                     b.ToTable("WorkBreakdownStructure");
                 });
 
-            modelBuilder.Entity("plantool.Models.Network", b =>
+            modelBuilder.Entity("plantool.Models.Entities.Network", b =>
                 {
-                    b.HasOne("plantool.Models.Project", "Project")
+                    b.HasOne("plantool.Models.Entities.Project", "Project")
                         .WithMany("Networks")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjectId");
 
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("plantool.Models.ProjectActivity", b =>
+            modelBuilder.Entity("plantool.Models.Entities.ProjectActivity", b =>
                 {
-                    b.HasOne("plantool.Models.ActivityType", "ActivityType")
+                    b.HasOne("plantool.Models.Entities.ActivityType", "ActivityType")
                         .WithMany()
-                        .HasForeignKey("ActivityTypeCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ActivityTypeCode");
 
-                    b.HasOne("plantool.Models.WorkBreakdownStructure", "WorkBreakdownStructure")
+                    b.HasOne("plantool.Models.Entities.WorkBreakdownStructure", "WorkBreakdownStructure")
                         .WithMany("ProjectActivities")
                         .HasForeignKey("WorkBreakdownStructureId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -182,28 +171,26 @@ namespace plantool.Migrations
                     b.Navigation("WorkBreakdownStructure");
                 });
 
-            modelBuilder.Entity("plantool.Models.WorkBreakdownStructure", b =>
+            modelBuilder.Entity("plantool.Models.Entities.WorkBreakdownStructure", b =>
                 {
-                    b.HasOne("plantool.Models.Network", "Network")
+                    b.HasOne("plantool.Models.Entities.Network", "Network")
                         .WithMany("WorkBreakdownStructures")
-                        .HasForeignKey("NetworkId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("NetworkId");
 
                     b.Navigation("Network");
                 });
 
-            modelBuilder.Entity("plantool.Models.Network", b =>
+            modelBuilder.Entity("plantool.Models.Entities.Network", b =>
                 {
                     b.Navigation("WorkBreakdownStructures");
                 });
 
-            modelBuilder.Entity("plantool.Models.Project", b =>
+            modelBuilder.Entity("plantool.Models.Entities.Project", b =>
                 {
                     b.Navigation("Networks");
                 });
 
-            modelBuilder.Entity("plantool.Models.WorkBreakdownStructure", b =>
+            modelBuilder.Entity("plantool.Models.Entities.WorkBreakdownStructure", b =>
                 {
                     b.Navigation("ProjectActivities");
                 });

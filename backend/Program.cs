@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using plantool;
+using plantool.Data;
 using plantool.Services;
 
 var builder = WebApplication.CreateBuilder(args);

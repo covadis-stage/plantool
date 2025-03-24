@@ -1,9 +1,9 @@
-﻿namespace plantool.Models.Entities;
+﻿namespace plantool.Domain.Entities;
 public class ProjectActivity
 {
     // Imported from SAP
-    public string Key { get; set; } // = ProjectId + NetworkId + ActivityId
-    public string Id { get; set; }
+    public string Key { get; set; } = null!; // = ProjectId + NetworkId + ActivityId
+    public string Id { get; set; } = null!;
     public DateOnly? LatestStartDate { get; set; }
     public DateOnly? LatestFinishDate { get; set; }
     public DateOnly? OriginalFinishDate { get; set; }

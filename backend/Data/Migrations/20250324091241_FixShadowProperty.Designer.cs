@@ -3,17 +3,19 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using plantool;
 
 #nullable disable
 
-namespace plantool.Migrations
+namespace plantool.Data.Migrations
 {
     [DbContext(typeof(PlantoolDbContext))]
-    partial class PlantoolDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250324091241_FixShadowProperty")]
+    partial class FixShadowProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

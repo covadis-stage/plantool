@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using plantool.Models.Entities;
-using plantool.Models.Configurations;
+using plantool.Domain.Entities;
+using plantool.Domain.Configurations;
 
-namespace plantool;
+namespace plantool.Data;
 
 public class PlantoolDbContext : DbContext
 {

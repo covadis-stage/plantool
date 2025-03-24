@@ -1,4 +1,4 @@
-namespace plantool.Models;
+namespace plantool.Domain;
 
 public class CsvRow(string? projectId, string? networkId, string? activityId, string? customer, string? wbsId, string? operationShortText, string? projectManager, string? teamLeader, string? latestStartDate, string? latestFinishDate, string? activityCode, string? originalFinishDate, string? activityDescription, string? actualWork, string? work, string? workCenter, string? wbsType)
 {
