@@ -8,8 +8,8 @@ public class ProjectActivityConfiguration : IEntityTypeConfiguration<ProjectActi
 {
     public void Configure(EntityTypeBuilder<ProjectActivity> builder)
     {
-        builder.HasKey(pa => pa.Id);
-        builder.Property(pa => pa.Id)
+        builder.HasKey(pa => pa.Key);
+        builder.Property(pa => pa.Key)
             .IsRequired()
             .HasMaxLength(50);
 

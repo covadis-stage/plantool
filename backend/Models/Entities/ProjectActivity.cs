@@ -2,6 +2,7 @@
 public class ProjectActivity
 {
     // Imported from SAP
+    public string Key { get; set; } // = ProjectId + NetworkId + ActivityId
     public string Id { get; set; }
     public DateOnly? LatestStartDate { get; set; }
     public DateOnly? LatestFinishDate { get; set; }
@@ -10,10 +11,10 @@ public class ProjectActivity
     public TimeSpan? TimeSpent { get; set; } // "Actual Work" in SAP
     public string? TeamLeader { get; set; } // = Product Lead
     
-    public string ActivityTypeCode { get; set; }
-    public ActivityType ActivityType { get; set; } = null!;
+    public string? ActivityTypeCode { get; set; }
+    public ActivityType? ActivityType { get; set; }
 
-    public string WorkBreakdownStructureId { get; set; }
+    public string WorkBreakdownStructureId { get; set; } = null!;
     public WorkBreakdownStructure WorkBreakdownStructure { get; set; } = null!;
 
     // Written by user
