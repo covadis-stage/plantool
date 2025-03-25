@@ -17,8 +17,8 @@ public class ProjectActivityConfiguration : IEntityTypeConfiguration<ProjectActi
             .WithMany()
             .HasForeignKey(pa => pa.ActivityTypeCode);
 
-        builder.HasOne(pa => pa.WorkBreakdownStructure)
-            .WithMany(wbs => wbs.ProjectActivities)
-            .HasForeignKey(pa => pa.WorkBreakdownStructureId);
+        builder.HasOne(pa => pa.Project)
+            .WithMany(p => p.Activities)
+            .HasForeignKey(pa => pa.ProjectId);
     }
 }

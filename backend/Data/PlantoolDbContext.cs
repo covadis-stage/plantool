@@ -20,9 +20,7 @@ public class PlantoolDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfiguration(new ActivityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new NetworkConfiguration());
         modelBuilder.ApplyConfiguration(new ProjectActivityConfiguration());
         modelBuilder.ApplyConfiguration(new ProjectConfiguration());
-        modelBuilder.ApplyConfiguration(new WorkBreakdownStructureConfiguration());
     }
 }

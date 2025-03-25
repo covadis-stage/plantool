@@ -1,37 +1,24 @@
 using System.Globalization;
-using plantool.Data;
 using plantool.Domain;
 using plantool.Domain.Entities;
 
-namespace plantool.Services;
+namespace plantool.Services.CsvService;
 
-public class CsvProcessingService
+public static class CsvMappingService
 {
-    private readonly PlantoolDbContext _context;
-    private readonly ILogger<CsvProcessingService> _logger;
-
-    public CsvProcessingService(PlantoolDbContext context, ILogger<CsvProcessingService> logger) => (_context, _logger) = (context, logger);
-
-    public async Task ProcessCsv()
+    public static MappedCsvData MapCsv(List<string> columns, List<string[]> csvRows)
     {
-        _logger.LogInformation("Reading CSV file...");
-
-        var csvFile = Path.Combine(Directory.GetCurrentDirectory(), "InputData", "Engineering Orderplanning.csv");
-        var csvData = await File.ReadAllLinesAsync(csvFile);
-        var columns = csvData[0].Split(';').ToList();
-        var csvRows = csvData.Skip(1).Select(row => row.Split(';')).ToList();
-
-        _logger.LogInformation("CSV file read, processing...");
-
         var formattedRows = FormatRows(columns, csvRows);
 
         var projects = FindProjects(formattedRows);
-        var networks = FindNetworks(projects, formattedRows);
-        var wbs = FindWorkBreakdownStructures(networks, formattedRows);
         var activityTypes = FindActivityTypes(formattedRows);
-        var projectActivities = FindProjectActivities(wbs, activityTypes, formattedRows);
+        var projectActivities = FindProjectActivities(projects, activityTypes, formattedRows);
 
-        _logger.LogInformation("CSV file processed");
+        return new MappedCsvData(
+            projects: projects,
+            activityTypes: activityTypes,
+            projectActivities: projectActivities
+        );
     }
 
     private static List<CsvRow> FormatRows(List<string> columns, List<string[]> csvRows)
@@ -94,55 +81,6 @@ public class CsvProcessingService
         ).Distinct().ToList();
     }
 
-    private static List<Network> FindNetworks(List<Project> projects, List<CsvRow> formattedRows)
-    {
-        var networks = formattedRows
-        .Where(row => row.NetworkId != null)
-        .Select(row =>
-            new Network
-            {
-                Id = row.NetworkId!,
-                ProjectId = row.ProjectId,
-                Project = projects.FirstOrDefault(project => project.Id == row.ProjectId),
-            }
-        ).Distinct().ToList();
-
-        // Add self as child to parent project
-        networks.ForEach(network =>
-        {
-            if (network.Project == null) return;
-            network.Project!.Networks ??= [];
-            network.Project!.Networks.Add(network);
-        });
-
-        return networks;
-    }
-
-    private static List<WorkBreakdownStructure> FindWorkBreakdownStructures(List<Network> networks, List<CsvRow> formattedRows)
-    {
-        var wbs = formattedRows
-        .Where(row => row.WbsId != null)
-        .Select(row =>
-            new WorkBreakdownStructure
-            {
-                Id = row.WbsId!,
-                Type = row.WbsType,
-                NetworkId = row.NetworkId,
-                Network = networks.FirstOrDefault(network => network.Id == row.NetworkId),
-            }
-        ).Distinct().ToList();
-
-        // Add self as child to parent network
-        wbs.ForEach(wbs =>
-        {
-            if (wbs.Network == null) return;
-            wbs.Network!.WorkBreakdownStructures ??= [];
-            wbs.Network!.WorkBreakdownStructures.Add(wbs);
-        });
-
-        return wbs;
-    }
-
     private static List<ActivityType> FindActivityTypes(List<CsvRow> formattedRows)
     {
         return formattedRows
@@ -157,7 +95,7 @@ public class CsvProcessingService
         ).Distinct().ToList();
     }
 
-    private static List<ProjectActivity> FindProjectActivities(List<WorkBreakdownStructure> wbs, List<ActivityType> activityTypes, List<CsvRow> formattedRows)
+    private static List<ProjectActivity> FindProjectActivities(List<Project> projects, List<ActivityType> activityTypes, List<CsvRow> formattedRows)
     {
         var projectActivities = formattedRows
         .Where(row =>
@@ -165,7 +103,7 @@ public class CsvProcessingService
             && row.WbsId != null
             && row.NetworkId != null
             && row.ProjectId != null
-            && wbs.Any(wbs => wbs.Id == row.WbsId)
+            && projects.Any(project => project.Id == row.ProjectId)
         )
         .Select(row =>
         {
@@ -181,16 +119,18 @@ public class CsvProcessingService
                 TeamLeader = row.TeamLeader,
                 ActivityTypeCode = row.ActivityCode,
                 ActivityType = activityTypes.FirstOrDefault(activityType => activityType.Code == row.ActivityCode),
-                WorkBreakdownStructureId = row.WbsId!,
-                WorkBreakdownStructure = wbs.First(wbs => wbs.Id == row.WbsId),
+                WorkBreakdownStructure = row.WbsId,
+                Network = row.NetworkId,
+                ProjectId = row.ProjectId!,
+                Project = projects.First(project => project.Id == row.ProjectId),
             };
         }).Distinct().ToList();
 
-        // Add self as child to parent wbs
+        // Add self as child to parent project
         projectActivities.ForEach(projectActivity =>
         {
-            projectActivity.WorkBreakdownStructure.ProjectActivities ??= [];
-            projectActivity.WorkBreakdownStructure.ProjectActivities.Add(projectActivity);
+            projectActivity.Project.Activities ??= [];
+            projectActivity.Project.Activities.Add(projectActivity);
         });
 
         return projectActivities;

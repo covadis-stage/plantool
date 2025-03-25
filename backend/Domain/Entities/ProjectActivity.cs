@@ -14,8 +14,11 @@ public class ProjectActivity
     public string? ActivityTypeCode { get; set; }
     public ActivityType? ActivityType { get; set; }
 
-    public string WorkBreakdownStructureId { get; set; } = null!;
-    public WorkBreakdownStructure WorkBreakdownStructure { get; set; } = null!;
+    public string? WorkBreakdownStructure { get; set; }
+    public string? Network { get; set; }
+    
+    public string ProjectId { get; set; } = null!;
+    public Project Project { get; set; } = null!;
 
     // Written by user
     public string? GeneralRemark { get; set; }
