@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using plantool.Data;
-using plantool.Services.CsvService;
+using plantool.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,9 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<CsvProcessingService>();
-builder.Services.AddScoped<CsvSyncService>();
-builder.Services.AddSingleton<IFileReader, CsvFileReader>();
+builder.Services.AddApplicationServices();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<PlantoolDbContext>(options =>
