@@ -20,5 +20,11 @@ public class ProjectActivityConfiguration : IEntityTypeConfiguration<ProjectActi
         builder.HasOne(pa => pa.Project)
             .WithMany(p => p.Activities)
             .HasForeignKey(pa => pa.ProjectId);
+
+        builder.Property(pa => pa.TimeEstimated)
+            .HasConversion<long>();
+
+        builder.Property(pa => pa.TimeSpent)
+            .HasConversion<long>();
     }
 }

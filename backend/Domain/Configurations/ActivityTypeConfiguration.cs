@@ -8,8 +8,8 @@ public class ActivityTypeConfiguration : IEntityTypeConfiguration<ActivityType>
 {
     public void Configure(EntityTypeBuilder<ActivityType> builder)
     {
-        builder.HasKey(at => at.Code);
-        builder.Property(at => at.Code)
+        builder.HasKey(at => at.Key);
+        builder.Property(at => at.Key)
             .IsRequired()
             .HasMaxLength(20);
     }

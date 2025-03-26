@@ -3,9 +3,10 @@ namespace plantool.Services.CsvService;
 public class CsvProcessingService
 {
     private readonly ILogger<CsvProcessingService> _logger;
+    private readonly CsvSyncService _csvSyncService;
 
-    public CsvProcessingService(ILogger<CsvProcessingService> logger) 
-        => _logger = logger;
+    public CsvProcessingService(ILogger<CsvProcessingService> logger, CsvSyncService csvSyncService) 
+        => (_logger, _csvSyncService) = (logger, csvSyncService);
 
     public async Task ProcessCsv()
     {
@@ -19,5 +20,8 @@ public class CsvProcessingService
         var mappedCsv = CsvMappingService.MapCsv(columns, csvRows);
 
         _logger.LogInformation("CSV file processed, saving to database...");
+        await _csvSyncService.SyncCsvDataAsync(mappedCsv);
+
+        _logger.LogInformation("Changes saved to database.");
     }
 }

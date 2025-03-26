@@ -1,9 +1,9 @@
 ﻿namespace plantool.Domain.Entities;
-public class ProjectActivity
+public class ProjectActivity : IAuditable
 {
     // Imported from SAP
     public string Key { get; set; } = null!; // = ProjectId + NetworkId + ActivityId
-    public string Id { get; set; } = null!;
+    public string Id { get; set; } = null!; // "Activity"(Id) in SAP
     public DateOnly? LatestStartDate { get; set; }
     public DateOnly? LatestFinishDate { get; set; }
     public DateOnly? OriginalFinishDate { get; set; }
@@ -16,9 +16,12 @@ public class ProjectActivity
 
     public string? WorkBreakdownStructure { get; set; }
     public string? Network { get; set; }
-    
+
     public string ProjectId { get; set; } = null!;
     public Project Project { get; set; } = null!;
+
+    // Updated automatically
+    public bool IsArchived { get; set; }
 
     // Written by user
     public string? GeneralRemark { get; set; }

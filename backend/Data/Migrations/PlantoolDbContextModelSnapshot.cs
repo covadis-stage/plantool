@@ -8,7 +8,7 @@ using plantool.Data;
 
 #nullable disable
 
-namespace plantool.Data.Migrations
+namespace plantool.Migrations
 {
     [DbContext(typeof(PlantoolDbContext))]
     partial class PlantoolDbContextModelSnapshot : ModelSnapshot
@@ -24,34 +24,40 @@ namespace plantool.Data.Migrations
 
             modelBuilder.Entity("plantool.Domain.Entities.ActivityType", b =>
                 {
-                    b.Property<string>("Code")
+                    b.Property<string>("Key")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
+
                     b.Property<string>("OperationShortText")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Code");
+                    b.HasKey("Key");
 
                     b.ToTable("ActivityTypes");
                 });
 
             modelBuilder.Entity("plantool.Domain.Entities.Project", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("Key")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Customer")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ProjectManager")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Key");
 
                     b.ToTable("Projects");
                 });
@@ -80,6 +86,9 @@ namespace plantool.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
+
                     b.Property<DateOnly?>("LatestFinishDate")
                         .HasColumnType("date");
 
@@ -99,11 +108,11 @@ namespace plantool.Data.Migrations
                     b.Property<string>("TeamLeader")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan?>("TimeEstimated")
-                        .HasColumnType("time");
+                    b.Property<long?>("TimeEstimated")
+                        .HasColumnType("bigint");
 
-                    b.Property<TimeSpan?>("TimeSpent")
-                        .HasColumnType("time");
+                    b.Property<long?>("TimeSpent")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("WorkBreakdownStructure")
                         .HasColumnType("nvarchar(max)");

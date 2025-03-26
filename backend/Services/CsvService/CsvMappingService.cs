@@ -74,7 +74,7 @@ public static class CsvMappingService
         .Select(row =>
             new Project
             {
-                Id = row.ProjectId!,
+                Key = row.ProjectId!,
                 Customer = row.Customer,
                 ProjectManager = row.ProjectManager,
             }
@@ -88,7 +88,7 @@ public static class CsvMappingService
         .Select(row =>
             new ActivityType
             {
-                Code = row.ActivityCode!,
+                Key = row.ActivityCode!,
                 Description = row.ActivityDescription,
                 OperationShortText = row.OperationShortText,
             }
@@ -100,16 +100,14 @@ public static class CsvMappingService
         var projectActivities = formattedRows
         .Where(row =>
             row.ActivityId != null
-            && row.WbsId != null
             && row.NetworkId != null
             && row.ProjectId != null
-            && projects.Any(project => project.Id == row.ProjectId)
+            && projects.Any(project => project.Key == row.ProjectId)
         )
-        .Select(row =>
-        {
-            return new ProjectActivity
+        .Select(row => 
+            new ProjectActivity 
             {
-                Key = $"{row.ProjectId!}-{row.NetworkId!}-{row.WbsId!}-{row.ActivityId!}",
+                Key = $"{row.ProjectId!}-{row.NetworkId!}-{row.ActivityId!}",
                 Id = row.ActivityId!,
                 LatestStartDate = ParseDate(row.LatestStartDate),
                 LatestFinishDate = ParseDate(row.LatestFinishDate),
@@ -118,13 +116,13 @@ public static class CsvMappingService
                 TimeSpent = ParseTimeSpan(row.ActualWork),
                 TeamLeader = row.TeamLeader,
                 ActivityTypeCode = row.ActivityCode,
-                ActivityType = activityTypes.FirstOrDefault(activityType => activityType.Code == row.ActivityCode),
+                ActivityType = activityTypes.FirstOrDefault(activityType => activityType.Key == row.ActivityCode),
                 WorkBreakdownStructure = row.WbsId,
                 Network = row.NetworkId,
                 ProjectId = row.ProjectId!,
-                Project = projects.First(project => project.Id == row.ProjectId),
-            };
-        }).Distinct().ToList();
+                Project = projects.First(project => project.Key == row.ProjectId),
+            }
+        ).Distinct().ToList();
 
         // Add self as child to parent project
         projectActivities.ForEach(projectActivity =>

@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using plantool.Data;
 using plantool.Domain;
+using plantool.Domain.Entities;
 
 namespace plantool.Services.CsvService;
 
@@ -10,6 +12,69 @@ public class CsvSyncService(PlantoolDbContext context, ILogger<CsvSyncService> l
 
     public async Task SyncCsvDataAsync(MappedCsvData csvData)
     {
+        csvData.Projects.ForEach(p => p.Activities = []);
+        csvData.ProjectActivities.ForEach(pa => pa.ActivityType = null!);
+        csvData.ProjectActivities.ForEach(pa => pa.Project = null!);
+
+        var existingProjects = await _context.Projects.ToListAsync() ?? [];
+        SyncAuditable(existingProjects.Cast<IAuditable>().ToList(), csvData.Projects.Cast<IAuditable>().ToList());
+        
+        var existingActivityTypes = await _context.ActivityTypes.ToListAsync() ?? [];
+        SyncAuditable(existingActivityTypes.Cast<IAuditable>().ToList(), csvData.ActivityTypes.Cast<IAuditable>().ToList());
+        
+        var existingActivities = await _context.Activities.ToListAsync() ?? [];
+        SyncAuditable(existingActivities.Cast<IAuditable>().ToList(), csvData.ProjectActivities.Cast<IAuditable>().ToList());
+
         await _context.SaveChangesAsync();
+    }
+
+    private void SyncAuditable(List<IAuditable> existing, List<IAuditable> imported)
+    {
+        var auditableComparer = new AuditableComparer();
+
+        var toArchive = existing.Where(a => !a.IsArchived).Except(imported, auditableComparer).ToList();
+        var toCreate = imported.Except(existing, auditableComparer).ToList();
+        var toUpdate = imported.Intersect(existing, auditableComparer).ToList();
+
+        foreach (var entity in toArchive) entity.IsArchived = true;
+
+        foreach (var entity in toCreate) _context.Add(entity);
+
+        foreach (var entity in toUpdate)
+        {
+            var existingEntity = existing.First(e => e.Key == entity.Key);
+            if (existingEntity is ProjectActivity existingActivity && entity is ProjectActivity importedActivity) 
+                UpdateActivity(existingActivity, importedActivity);
+            else 
+                _context.Entry(existingEntity).CurrentValues.SetValues(entity);            
+        }
+
+        _logger.LogInformation(
+            "\n----------------------------------------\n" +
+            $"Archived {toArchive.Count} of type {imported.First().GetType().Name}\n" +
+            $"Created {toCreate.Count} of type {imported.First().GetType().Name}\n" +
+            $"Updated {toUpdate.Count} of type {imported.First().GetType().Name}" +
+            "\n----------------------------------------"
+        );
+    }
+
+    private void UpdateActivity(ProjectActivity existing, ProjectActivity imported)
+    {
+        existing.Key = imported.Key;
+        existing.Id = imported.Id;
+        existing.LatestStartDate = imported.LatestStartDate;
+        existing.LatestFinishDate = imported.LatestFinishDate;
+        existing.OriginalFinishDate = imported.OriginalFinishDate;
+        existing.TimeEstimated = imported.TimeEstimated;
+        existing.TimeSpent = imported.TimeSpent;
+        existing.TeamLeader = imported.TeamLeader;
+        existing.ActivityTypeCode = imported.ActivityTypeCode;
+        existing.ActivityType = imported.ActivityType;
+        existing.WorkBreakdownStructure = imported.WorkBreakdownStructure;
+        existing.Network = imported.Network;
+        existing.ProjectId = imported.ProjectId;
+        existing.Project = imported.Project;
+
+        _context.Entry(existing).State = EntityState.Modified;
     }
 }
