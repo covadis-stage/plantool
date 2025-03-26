@@ -22,9 +22,9 @@ public class ProjectActivityConfiguration : IEntityTypeConfiguration<ProjectActi
             .HasForeignKey(pa => pa.ProjectId);
 
         builder.Property(pa => pa.TimeEstimated)
-            .HasConversion<long>();
+            .HasConversion<long?>();
 
         builder.Property(pa => pa.TimeSpent)
-            .HasConversion<long>();
+            .HasConversion<long?>();
     }
 }

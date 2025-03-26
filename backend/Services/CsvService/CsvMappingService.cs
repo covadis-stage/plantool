@@ -6,9 +6,9 @@ namespace plantool.Services.CsvService;
 
 public static class CsvMappingService
 {
-    public static MappedCsvData MapCsv(List<string> columns, List<string[]> csvRows)
+    public static MappedCsvData MapCsv(List<string> columnHeaders, List<string[]> csvRows)
     {
-        var formattedRows = FormatRows(columns, csvRows);
+        var formattedRows = FormatRows(columnHeaders, csvRows);
 
         var projects = FindProjects(formattedRows);
         var activityTypes = FindActivityTypes(formattedRows);
@@ -21,25 +21,25 @@ public static class CsvMappingService
         );
     }
 
-    private static List<CsvRow> FormatRows(List<string> columns, List<string[]> csvRows)
+    private static List<CsvRow> FormatRows(List<string> columnHeaders, List<string[]> csvRows)
     {
-        var projectIdIndex = columns.IndexOf("Project");
-        var networkIdIndex = columns.IndexOf("Network");
-        var activityIdIndex = columns.IndexOf("Activity");
-        var customerIndex = columns.IndexOf("Customer");
-        var wbsIdIndex = columns.IndexOf("WBS");
-        var operationShortTextIndex = columns.IndexOf("Opr. short text");
-        var projectManagerIndex = columns.IndexOf("PM");
-        var teamLeaderIndex = columns.IndexOf("TL");
-        var latestStartDateIndex = columns.IndexOf("Latest Start Date");
-        var latestFinishDateIndex = columns.IndexOf("Latest Finish Date");
-        var activityCodeIndex = columns.IndexOf("Activity Code");
-        var originalFinishDateIndex = columns.IndexOf("Original Finish Date");
-        var activityDescriptionIndex = columns.IndexOf("Activity Description");
-        var actualWorkIndex = columns.IndexOf("Actual work");
-        var workIndex = columns.IndexOf("Work");
-        var workCenterIndex = columns.IndexOf("Work Center");
-        var wbsTypeIndex = columns.IndexOf("WBS Type");
+        var projectIdIndex = columnHeaders.IndexOf("Project");
+        var networkIdIndex = columnHeaders.IndexOf("Network");
+        var activityIdIndex = columnHeaders.IndexOf("Activity");
+        var customerIndex = columnHeaders.IndexOf("Customer");
+        var wbsIdIndex = columnHeaders.IndexOf("WBS");
+        var operationShortTextIndex = columnHeaders.IndexOf("Opr. short text");
+        var projectManagerIndex = columnHeaders.IndexOf("PM");
+        var teamLeaderIndex = columnHeaders.IndexOf("TL");
+        var latestStartDateIndex = columnHeaders.IndexOf("Latest Start Date");
+        var latestFinishDateIndex = columnHeaders.IndexOf("Latest Finish Date");
+        var activityCodeIndex = columnHeaders.IndexOf("Activity Code");
+        var originalFinishDateIndex = columnHeaders.IndexOf("Original Finish Date");
+        var activityDescriptionIndex = columnHeaders.IndexOf("Activity Description");
+        var actualWorkIndex = columnHeaders.IndexOf("Actual work");
+        var workIndex = columnHeaders.IndexOf("Work");
+        var workCenterIndex = columnHeaders.IndexOf("Work Center");
+        var wbsTypeIndex = columnHeaders.IndexOf("WBS Type");
 
         List<CsvRow> formattedCsvRows = [];
         csvRows.ForEach(row =>

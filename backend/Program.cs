@@ -13,6 +13,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<CsvProcessingService>();
 builder.Services.AddScoped<CsvSyncService>();
+builder.Services.AddSingleton<IFileReader, CsvFileReader>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<PlantoolDbContext>(options =>

@@ -16,12 +16,12 @@ public class CsvSyncService(PlantoolDbContext context, ILogger<CsvSyncService> l
         csvData.ProjectActivities.ForEach(pa => pa.ActivityType = null!);
         csvData.ProjectActivities.ForEach(pa => pa.Project = null!);
 
-        var existingProjects = await _context.Projects.ToListAsync() ?? [];
-        SyncAuditable(existingProjects.Cast<IAuditable>().ToList(), csvData.Projects.Cast<IAuditable>().ToList());
-        
         var existingActivityTypes = await _context.ActivityTypes.ToListAsync() ?? [];
         SyncAuditable(existingActivityTypes.Cast<IAuditable>().ToList(), csvData.ActivityTypes.Cast<IAuditable>().ToList());
-        
+
+        var existingProjects = await _context.Projects.ToListAsync() ?? [];
+        SyncAuditable(existingProjects.Cast<IAuditable>().ToList(), csvData.Projects.Cast<IAuditable>().ToList());
+
         var existingActivities = await _context.Activities.ToListAsync() ?? [];
         SyncAuditable(existingActivities.Cast<IAuditable>().ToList(), csvData.ProjectActivities.Cast<IAuditable>().ToList());
 
@@ -43,19 +43,24 @@ public class CsvSyncService(PlantoolDbContext context, ILogger<CsvSyncService> l
         foreach (var entity in toUpdate)
         {
             var existingEntity = existing.First(e => e.Key == entity.Key);
-            if (existingEntity is ProjectActivity existingActivity && entity is ProjectActivity importedActivity) 
-                UpdateActivity(existingActivity, importedActivity);
-            else 
-                _context.Entry(existingEntity).CurrentValues.SetValues(entity);            
+            UpdateEntity(existingEntity, entity);
         }
 
         _logger.LogInformation(
             "\n----------------------------------------\n" +
-            $"Archived {toArchive.Count} of type {imported.First().GetType().Name}\n" +
-            $"Created {toCreate.Count} of type {imported.First().GetType().Name}\n" +
-            $"Updated {toUpdate.Count} of type {imported.First().GetType().Name}" +
+            $"Archiving {toArchive.Count} of type {imported.First().GetType().Name}...\n" +
+            $"Creating {toCreate.Count} of type {imported.First().GetType().Name}...\n" +
+            $"Updating {toUpdate.Count} of type {imported.First().GetType().Name}..." +
             "\n----------------------------------------"
         );
+    }
+
+    private void UpdateEntity(IAuditable existingEntity, IAuditable importedEntity)
+    {
+        if (existingEntity is ProjectActivity existingActivity && importedEntity is ProjectActivity importedActivity)
+            UpdateActivity(existingActivity, importedActivity);
+        else
+            _context.Entry(existingEntity).CurrentValues.SetValues(importedEntity);
     }
 
     private void UpdateActivity(ProjectActivity existing, ProjectActivity imported)
@@ -69,11 +74,10 @@ public class CsvSyncService(PlantoolDbContext context, ILogger<CsvSyncService> l
         existing.TimeSpent = imported.TimeSpent;
         existing.TeamLeader = imported.TeamLeader;
         existing.ActivityTypeCode = imported.ActivityTypeCode;
-        existing.ActivityType = imported.ActivityType;
         existing.WorkBreakdownStructure = imported.WorkBreakdownStructure;
         existing.Network = imported.Network;
         existing.ProjectId = imported.ProjectId;
-        existing.Project = imported.Project;
+        existing.IsArchived = false;
 
         _context.Entry(existing).State = EntityState.Modified;
     }
