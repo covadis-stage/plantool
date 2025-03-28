@@ -1,55 +1,45 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - master
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: windows-latest
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
-
-- task: NodeTool@0
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK'
   inputs:
-    versionSource: 'spec'
-    versionSpec: '18.x'
-    
-- task: Npm@1
-  inputs:
-    command: 'install'
-    workingDir: 'frontend'
+    version: 8.x
+    performMultiLevelLookup: true
 
-- task: Npm@1
+- task: DotNetCoreCLI@2
+  displayName: 'Dotnet Restore'
   inputs:
-    command: 'custom'
-    workingDir: 'frontend'
-    customCommand: 'run build'
+    command: 'restore'
+    projects: '**/*.csproj'
 
-- task: ArchiveFiles@2
+- task: DotNetCoreCLI@2
+  displayName: 'Build and Publish API'
   inputs:
-    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/frontend'
-    includeRootFolder: false
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/frontend-plantool.zip'
-    replaceExistingArchive: true
-
-# - task: CopyFiles@2
-#   inputs:
-#     SourceFolder: '$(Build.ArtifactStagingDirectory)'
-#     Contents: 'frontend-plantool.zip'
-#     TargetFolder: '$(Build.ArtifactStagingDirectory)\ArtifactsToBePublished'
+    command: 'publish'
+    publishWebProjects: false
+    zipAfterPublish: true
+    projects: '**/*.csproj'
+    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish API'
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+    targetPath: '$(Build.ArtifactStagingDirectory)'
+    artifactname: 'drop'
+
+- task: AzureWebApp@1
+  displayName: 'Deploy to Azure Web App'
+  inputs:
+    azureSubscription: 'Service connection Azure Resource Manager rg-v.verdouw'
+    appType: 'webApp'
+    appName: 'rademaker-plantool'
+    deployToSlotOrASE: true
+    resourceGroupName: 'rg-v.verdouw'
+    slotName: 'production'
+    package: '$(Build.ArtifactStagingDirectory)/drop/*.zip'
+    deploymentMethod: 'zipDeploy'
