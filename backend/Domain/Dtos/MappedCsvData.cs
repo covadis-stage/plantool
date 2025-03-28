@@ -1,6 +1,6 @@
 using plantool.Domain.Entities;
 
-namespace plantool.Domain;
+namespace plantool.Domain.Dtos;
 
 public class MappedCsvData(List<Project> projects, List<ActivityType> activityTypes, List<ProjectActivity> projectActivities)
 {

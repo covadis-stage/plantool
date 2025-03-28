@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using plantool.Data;
-using plantool.Domain;
+using plantool.Domain.Dtos;
 using plantool.Domain.Entities;
 
 namespace plantool.Services.CsvService;

@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using plantool.Domain.Entities;
 
-namespace plantool.Domain.Configurations;
+namespace plantool.Data.Configurations;
 
 public class ProjectActivityConfiguration : IEntityTypeConfiguration<ProjectActivity>
 {

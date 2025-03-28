@@ -1,16 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using plantool.Domain.Entities;
-using plantool.Domain.Configurations;
+using plantool.Data.Configurations;
 
 namespace plantool.Data;
 
-public class PlantoolDbContext : DbContext
+public class PlantoolDbContext(DbContextOptions<PlantoolDbContext> options) : DbContext(options)
 {
-    public PlantoolDbContext(DbContextOptions<PlantoolDbContext> options)
-        : base(options)
-    {
-    }
-
     public DbSet<Project> Projects { get; set; }
     public DbSet<ProjectActivity> Activities { get; set; }
     public DbSet<ActivityType> ActivityTypes { get; set; }
