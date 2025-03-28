@@ -1,0 +1,34 @@
+trigger:
+- master
+
+pool:
+  name: 'Local agent' # Gebruik hier de naam van de gemaakte Agent pool
+
+jobs:
+- job: analyse
+  displayName: Analyse using SonarQube
+  steps:
+  - checkout: self
+  - task: SonarQubePrepare@7
+    displayName: "Prepare SonarQube"
+    inputs:
+      SonarQube: "plantool_backend" # Gebruik hier de naam van de gemaakte Service connection
+      scannerMode: "dotnet" #
+      projectKey: "Covadis_Innovatielab_-_Opdracht_Vasil_Verdouw_plantool_c3f6808f-a3cc-4a62-b91b-22bc1d7bec1a" # Gebruik hier de project key uit SonarQube
+  - task: UseDotNet@2
+    displayName: 'Install .NET Core SDK'
+    inputs:
+      version: "8.x"
+  - task: DotNetCoreCLI@2
+    displayName: 'Build .NET projects'
+    inputs:
+      command: 'build'
+      projects: "**/*.csproj"
+  - task: SonarCloudAnalyze@3
+    displayName: 'Analyse projects using SonarQube'
+    inputs:
+      jdkversion: "JAVA_HOME_17_X64"
+  - task: SonarQubePublish@7
+    displayName: 'Publish results to SonarQube'
+    inputs:
+      pollingTimeoutSec: "300"
