@@ -4,5 +4,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   nitro: {
     preset: "azure",
+  },
+  app: {
+    head: {
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      ],
+    }
   }
 })

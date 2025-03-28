@@ -3,10 +3,8 @@
 </script>
 
 <template>
-<div>
-    <h1>Home</h1>
-    <p>Home page content</p>
-</div>
+    <h1>Index</h1>
+    <NuxtLink to="health-check">health check</NuxtLink>
 </template>
 
 <style lang="scss" scoped>
