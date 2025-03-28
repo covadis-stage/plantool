@@ -1,0 +1,29 @@
+trigger:
+- master
+
+pool:
+  name: 'Local agent' # Gebruik hier de naam van de gemaakte Agent pool
+
+jobs:
+- job: analyse
+  displayName: Analyse using SonarQube
+  steps:
+  - checkout: self
+    fetchDepth: 0
+  - task: SonarQubePrepare@7
+    displayName: "Prepare SonarQube"
+    inputs:
+      SonarQube: "plantool_frontend" # Gebruik hier de naam van de gemaakte Service connection
+      scannerMode: "cli"
+      configMode: manual
+      cliProjectKey: "plantool_frontend" # Gebruik hier de project key uit SonarQube
+
+  - task: SonarCloudAnalyze@3
+    displayName: 'Analyse projects using SonarQube'
+    inputs:
+      jdkversion: "JAVA_HOME_17_X64"
+
+  - task: SonarQubePublish@7
+    displayName: 'Publish results to SonarQube'
+    inputs:
+      pollingTimeoutSec: "300"
