@@ -24,12 +24,12 @@ steps:
     publishWebProjects: false
     zipAfterPublish: true
     projects: '**/*.csproj'
-    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
+    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)/api'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish API'
   inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)'
+    targetPath: '$(Build.ArtifactStagingDirectory)/api'
     artifactname: 'drop'
 
 - task: AzureWebApp@1
@@ -41,5 +41,5 @@ steps:
     deployToSlotOrASE: true
     resourceGroupName: 'rg-v.verdouw'
     slotName: 'production'
-    package: '$(Build.ArtifactStagingDirectory)/drop/*.zip'
+    package: '$(Build.ArtifactStagingDirectory)/api/backend.zip'
     deploymentMethod: 'zipDeploy'
