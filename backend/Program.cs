@@ -13,6 +13,13 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplicationServices();
 
+builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
+{
+    builder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+}));
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<PlantoolDbContext>(options =>
     options.UseSqlServer(connectionString, sqlOptions =>
@@ -34,6 +41,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 
