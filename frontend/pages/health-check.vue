@@ -6,7 +6,7 @@ const { isHealthy, error, checkHealth } = useHealthCheck();
 
 <template>
     <h1>Health Check</h1>
-    <button @click="checkHealth">Check Health</button>
+    <Button @click="checkHealth">Check Health</Button>
     <div v-if="isHealthy">The system is healthy!</div>
     <div v-else-if="error">{{ error }}</div>
 </template>
