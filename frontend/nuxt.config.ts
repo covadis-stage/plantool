@@ -1,4 +1,5 @@
-import Lara from "@primeuix/themes/lara";
+import CustomTheme from "./primevue-theme";
+import primevueConfig from "./primevue-theme";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -13,12 +14,12 @@ export default defineNuxtConfig({
   primevue: {
     options: {
       theme: {
-        preset: Lara,
+        preset: CustomTheme,
         options: {
           darkModeSelector: false || 'none',
         }
-      }
-    }
+      },
+    },
   },
   app: {
     head: {
