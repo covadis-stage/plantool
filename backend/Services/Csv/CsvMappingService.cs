@@ -2,7 +2,7 @@ using System.Globalization;
 using plantool.Domain.Dtos;
 using plantool.Domain.Entities;
 
-namespace plantool.Services.CsvService;
+namespace plantool.Services.Csv;
 
 public static class CsvMappingService
 {

@@ -1,4 +1,4 @@
-namespace plantool.Services.CsvService;
+namespace plantool.Services.Csv;
 
 public interface IFileReader
 {

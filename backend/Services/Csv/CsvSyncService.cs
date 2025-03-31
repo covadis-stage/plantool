@@ -3,7 +3,7 @@ using plantool.Data;
 using plantool.Domain.Dtos;
 using plantool.Domain.Entities;
 
-namespace plantool.Services.CsvService;
+namespace plantool.Services.Csv;
 
 public class CsvSyncService(PlantoolDbContext context, ILogger<CsvSyncService> logger)
 {
