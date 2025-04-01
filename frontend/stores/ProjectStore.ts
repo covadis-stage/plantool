@@ -25,7 +25,7 @@ export const useProjectStore = defineStore("ProjectStore", () => {
 
             const project = projects.value.find(project => project.key === projectKey);
             if (!project) return []
-            if (project.activities) return project.activities
+            if (project.activities && project.activities.length > 0) return project.activities
 
             const response = await get(`Activities/project/${projectKey}`);
             if (!response) return [];
