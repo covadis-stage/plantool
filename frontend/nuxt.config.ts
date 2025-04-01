@@ -8,9 +8,7 @@ export default defineNuxtConfig({
   nitro: {
     preset: "azure",
   },
-  modules: [
-    '@primevue/nuxt-module',
-  ],
+  modules: ['@primevue/nuxt-module', '@pinia/nuxt'],
   primevue: {
     options: {
       theme: {

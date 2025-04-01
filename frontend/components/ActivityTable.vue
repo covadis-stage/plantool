@@ -2,37 +2,38 @@
 import type { TreeNode } from 'primevue/treenode';
 import type { Project } from '~/types/Project';
 
-const { projects, loadingProjects, getProjects } = useProjects();
-const { getActivitiesForProject } = useActivities();
+const projectStore = useProjectStore();
 const treeNodes = ref<TreeNode[]>([]);
 const loadingMethod = ref<"mask" | "icon">("mask");
 
 const onNodeExpand = async (node: TreeNode) => {
-    console.log("Node expanded", node.data);
     if (node.data && node.children) return;
     if (!node.data) return;
-    const project = node.data as Project;
     node.loading = true;
-    const activities = await getActivitiesForProject(project.key);
+
+    const project = node.data as Project;
+    const activities = await projectStore.getActivitiesForProject(project.key);
     const activitiesNode = {
         key: `${project.key}-activities`,
         label: project.customer,
         data: activities,
         leaf: true,
     } as TreeNode;
+
+    // Add the activities in 1 node so the component can decide how to display them
     node.children = [activitiesNode];
     node.loading = false;
 }
 
 onMounted(() => {
     (async () => {
-        await getProjects();
+        await projectStore.getProjects();
         loadingMethod.value = "icon";
     })();
 });
 
 watchEffect(() => {
-    treeNodes.value = projects.value.map((project) => {
+    treeNodes.value = projectStore.projects.map((project) => {
         return {
             key: project.key,
             label: project.customer,
@@ -47,7 +48,7 @@ watchEffect(() => {
     <Tree
         :value="treeNodes"
         @node-expand="onNodeExpand"
-        :loading="loadingProjects"
+        :loading="projectStore.loading"
         :loading-mode="loadingMethod"
         class="activity-table"
     >
