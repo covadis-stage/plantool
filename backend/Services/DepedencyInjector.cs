@@ -1,3 +1,4 @@
+using plantool.Services.Activities;
 using plantool.Services.Csv;
 using plantool.Services.Projects;
 
@@ -11,5 +12,6 @@ public static class DependencyInjector
         services.AddScoped<CsvSyncService>();
         services.AddSingleton<IFileReader, CsvFileReader>();
         services.AddScoped<ProjectsService>();
+        services.AddScoped<ActivitiesService>();
     }
 }

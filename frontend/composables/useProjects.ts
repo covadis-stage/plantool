@@ -1,37 +1,27 @@
-export const useProjects = () => {
-    const config = useRuntimeConfig();
-    const apiUrl = config.public.apiUrl;
+import type { Project } from "~/types/Project";
+import { useProjectMapper } from "./mappers/projectMapper";
 
-    const projects = ref([]);
-    const loading = ref(false);
+export const useProjects = () => {
+    const { loading, get, post } = useApi();
+    const projectMapper = useProjectMapper();
+
+    const projects = ref<Project[]>([]);
 
     const getProjects = async () => {
-        loading.value = true;
         try {
-            if (!apiUrl) {
-                throw new Error('API URL is not defined in the environment variables.');
-            }
-            const response = await fetch(`${apiUrl}/Projects`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-            });
-            if (!response.ok) {
-                throw new Error(`Error fetching projects: ${response.statusText}`);
-            }
-            projects.value = await response.json();
+            const response = await get('Projects');
+            projects.value = projectMapper.mapProjects(response);
+            if (!response) return [];
+            return projects.value;
         } catch (err) {
             console.error(err);
-        } finally {
-            loading.value = false;
+            return [];
         }
     }
 
     return {
+        loadingProjects: loading,
         projects,
-        loading,
         getProjects,
     }
 }

@@ -4,5 +4,6 @@
         "minimap.background": "#00000000",
         "scrollbar.shadow": "#00000000"
     },
-    "postman.settings.dotenv-detection-notification-visibility": false
+    "postman.settings.dotenv-detection-notification-visibility": false,
+    "html.format.wrapAttributes": "force-expand-multiline",
 }

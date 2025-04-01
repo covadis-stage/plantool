@@ -1,21 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
+using plantool.Services.Activities;
 
 namespace plantool.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ActivityController : ControllerBase
+public class ActivitiesController : ControllerBase
 {
-    private readonly ILogger<ActivityController> _logger;
+    private readonly ILogger<ActivitiesController> _logger;
+    private readonly ActivitiesService _activitiesService;
 
-    public ActivityController(ILogger<ActivityController> logger) =>
-        (_logger) = (logger);
+    public ActivitiesController(ILogger<ActivitiesController> logger, ActivitiesService activitiesService) =>
+        (_logger, _activitiesService) = (logger, activitiesService);
 
-    [HttpGet]
-    public IActionResult Get()
+    [HttpGet("project/{projectKey}")]
+    public async Task<IActionResult> GetActivitiesByProjectKey(string projectKey)
     {
-        // Simulate fetching activities from a database or service
-        var activities = new List<string> { "Activity1", "Activity2", "Activity3" };
+        var activities = await _activitiesService.GetActivitiesByProjectKeyAsync(projectKey);
         return Ok(activities);
     }
 }
