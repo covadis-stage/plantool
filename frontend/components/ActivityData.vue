@@ -16,7 +16,8 @@ const formatActivityType = (activityType: ActivityType) => {
         :value="activities"
         sort-mode="multiple"
         removable-sort
-        striped-rows paginator
+        striped-rows
+        paginator
         :rows="activities.length < 10 ? activities.length : 10"
         :rows-per-page-options="[10, 20, 50, activities.length]"
     >

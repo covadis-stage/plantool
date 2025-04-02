@@ -10,7 +10,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="loading" v-if="projectStore.loading">
+    <div class="loading" v-if="projectStore.loading && projectStore.projects.length === 0">
         <i class="pi pi-spin pi-spinner"></i>
     </div>
     <ProjectData
@@ -25,12 +25,15 @@ onMounted(() => {
 .loading {
     position: fixed;
     top: 0;
+    left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100dvw;
     height: 100dvh;
+    pointer-events: none;
 }
+
 i {
     font-size: 2rem;
 }

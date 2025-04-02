@@ -14,7 +14,7 @@ export const useApi = () => {
                 'Accept': 'application/json',
             },
         });
-        if (!response.ok) throw new Error(`Error during GET: ${response.statusText}`);
+        if (!response.ok) throw new Error(`Error during GET to ${apiUrl}/${url}: ${response.statusText}`);
         const json = await response.json();
         loading.value = false;
         return json;
