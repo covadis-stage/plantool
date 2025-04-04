@@ -17,5 +17,8 @@ public class PlantoolDbContext(DbContextOptions<PlantoolDbContext> options) : Db
         modelBuilder.ApplyConfiguration(new ActivityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ProjectActivityConfiguration());
         modelBuilder.ApplyConfiguration(new ProjectConfiguration());
+        modelBuilder.ApplyConfiguration(new EngineerTeamConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductTeamConfiguration());
+        modelBuilder.ApplyConfiguration(new CompetenceTeamConfiguration());
     }
 }
