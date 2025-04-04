@@ -15,6 +15,7 @@ public class ActivitiesService
     public async Task<List<ProjectActivity>> GetActivitiesByProjectKeyAsync(string projectKey) =>
         await _dbContext.Activities
         .Where(activity => activity.ProjectId == projectKey)
+        .Where(activity => !activity.IsArchived)
         .Include(activity => activity.ActivityType)
         .ToListAsync();
 }
