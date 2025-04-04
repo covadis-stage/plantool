@@ -20,6 +20,7 @@ public class ProductTeamConfiguration : IEntityTypeConfiguration<ProductTeam>
         builder.HasOne(pt => pt.ProductLead)
             .WithMany()
             .HasForeignKey(pt => pt.ProductLeadId)
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

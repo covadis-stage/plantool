@@ -9,6 +9,9 @@ public class PlantoolDbContext(DbContextOptions<PlantoolDbContext> options) : Db
     public DbSet<Project> Projects { get; set; }
     public DbSet<ProjectActivity> Activities { get; set; }
     public DbSet<ActivityType> ActivityTypes { get; set; }
+    public DbSet<Engineer> Engineers { get; set; }
+    public DbSet<ProductTeam> ProductTeams { get; set; }
+    public DbSet<CompetenceTeam> CompetenceTeams { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

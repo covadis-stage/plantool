@@ -6,8 +6,8 @@ public class ProductTeam
     public string CompetenceTeamName { get; set; } = null!;
     public CompetenceTeam CompetenceTeam { get; set; } = null!;
 
-    public string ProductLeadId { get; set; } = null!;
-    public Engineer ProductLead { get; set; } = null!;
+    public string? ProductLeadId { get; set; }
+    public Engineer? ProductLead { get; set; }
 
     public ICollection<Engineer> Engineers { get; set; } = [];
 }
