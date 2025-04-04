@@ -3,8 +3,10 @@
 </script>
 
 <template>
-    <h1>Index</h1>
-    <NuxtLink to="health-check">health check</NuxtLink>
+    <Container>
+        <h1>Index</h1>
+        <NuxtLink to="health-check">health check</NuxtLink>
+    </Container>
     <ActivityTable />
 </template>
 

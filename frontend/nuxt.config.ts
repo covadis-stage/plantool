@@ -33,5 +33,11 @@ export default defineNuxtConfig({
   },
   css: [
     '@/assets/style/imports.scss',
-  ]
+  ],
+  components: [
+    {
+      path: "~/components",
+      pathPrefix: false,
+    },
+  ],
 })

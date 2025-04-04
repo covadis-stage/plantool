@@ -10,15 +10,22 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="loading" v-if="projectStore.loading && projectStore.projects.length === 0">
+    <div
+        class="loading"
+        v-if="projectStore.loading && projectStore.projects.length === 0"
+    >
         <i class="pi pi-spin pi-spinner"></i>
     </div>
-    <ProjectData
-        v-for="project in projectStore.projects"
-        :key="project.key"
-        :project="project"
+    <VirtualScroller
+        v-else-if="projectStore.projects.length > 0"
+        :items="projectStore.projects"
+        :itemSize="50"
+        scroll-height="100%"
     >
-    </ProjectData>
+        <template v-slot:item="{ item }">
+            <ProjectData :project="item"></ProjectData>
+        </template>
+    </VirtualScroller>
 </template>
 
 <style lang="scss" scoped>

@@ -30,6 +30,7 @@ const close = () => {
 </script>
 
 <template>
+    <Container>
     <div class="project-data" @click="toggleOpen">
         <div class="left-side">
             <i v-if="isOpen === false" class="pi pi-chevron-right"></i>
@@ -40,17 +41,19 @@ const close = () => {
         <p>{{ project.key }}</p>
     </div>
     <ActivityData v-if="isOpen" :activities="project.activities" />
+    </Container>
 </template>
 
 <style lang="scss" scoped>
 .project-data {
     width: 100%;
+    height: 50px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     border-radius: 8px;
-    padding: 16px 16px;
+    padding: 0 16px;
     user-select: none;
 
     .left-side {
