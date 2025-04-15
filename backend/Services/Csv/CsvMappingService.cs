@@ -12,11 +12,13 @@ public static class CsvMappingService
 
         var projects = FindProjects(formattedRows);
         var activityTypes = FindActivityTypes(formattedRows);
-        var projectActivities = FindProjectActivities(projects, activityTypes, formattedRows);
+        var workCenters = FindWorkCenters(formattedRows);
+        var projectActivities = FindProjectActivities(projects, activityTypes, workCenters, formattedRows);
 
         return new MappedCsvData(
             projects: projects,
             activityTypes: activityTypes,
+            workCenters: workCenters,
             projectActivities: projectActivities
         );
     }
@@ -95,7 +97,15 @@ public static class CsvMappingService
         ).Distinct().ToList();
     }
 
-    private static List<ProjectActivity> FindProjectActivities(List<Project> projects, List<ActivityType> activityTypes, List<CsvRow> formattedRows)
+    private static List<WorkCenter> FindWorkCenters(List<CsvRow> formattedRows)
+    {
+        return formattedRows
+        .Where(row => row.WorkCenter != null)
+        .Select(row => new WorkCenter { Key = row.WorkCenter! })
+        .Distinct().ToList();
+    }
+
+    private static List<ProjectActivity> FindProjectActivities(List<Project> projects, List<ActivityType> activityTypes, List<WorkCenter> workCenters, List<CsvRow> formattedRows)
     {
         var projectActivities = formattedRows
         .Where(row =>
@@ -115,7 +125,8 @@ public static class CsvMappingService
                 TimeEstimated = ParseTimeSpan(row.Work),
                 TimeSpent = ParseTimeSpan(row.ActualWork),
                 TeamLeader = row.TeamLeader,
-                WorkCenter = row.WorkCenter,
+                WorkCenterKey = row.WorkCenter,
+                WorkCenter = workCenters.FirstOrDefault(workCenter => workCenter.Key == row.WorkCenter),
                 ActivityTypeCode = row.ActivityCode,
                 ActivityType = activityTypes.FirstOrDefault(activityType => activityType.Key == row.ActivityCode),
                 WorkBreakdownStructure = row.WbsId,

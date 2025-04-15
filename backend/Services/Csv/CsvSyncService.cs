@@ -15,9 +15,13 @@ public class CsvSyncService(PlantoolDbContext context, ILogger<CsvSyncService> l
         csvData.Projects.ForEach(p => p.Activities = []);
         csvData.ProjectActivities.ForEach(pa => pa.ActivityType = null!);
         csvData.ProjectActivities.ForEach(pa => pa.Project = null!);
+        csvData.ProjectActivities.ForEach(pa => pa.WorkCenter = null!);
 
         var existingActivityTypes = await _context.ActivityTypes.ToListAsync() ?? [];
         SyncAuditable(existingActivityTypes.Cast<IAuditable>().ToList(), csvData.ActivityTypes.Cast<IAuditable>().ToList());
+
+        var existingWorkCenters = await _context.WorkCenters.ToListAsync() ?? [];
+        SyncAuditable(existingWorkCenters.Cast<IAuditable>().ToList(), csvData.WorkCenters.Cast<IAuditable>().ToList());
 
         var existingProjects = await _context.Projects.ToListAsync() ?? [];
         SyncAuditable(existingProjects.Cast<IAuditable>().ToList(), csvData.Projects.Cast<IAuditable>().ToList());

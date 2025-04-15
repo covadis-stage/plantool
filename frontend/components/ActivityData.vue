@@ -3,6 +3,7 @@ import type { ProjectActivity } from '~/types/Activity';
 import type { ActivityType } from '~/types/ActivityType';
 import Popover from "primevue/popover";
 import type DataTable from 'primevue/datatable';
+import type { WorkCenter } from '~/types/WorkCenter';
 
 const props = defineProps<{
     activities: ProjectActivity[];
@@ -13,6 +14,10 @@ const popover = ref<InstanceType<typeof Popover>>();
 
 const formatActivityType = (activityType: ActivityType) => {
     return `${activityType.key} - ${activityType.description}\n\n${activityType.operationShortText}`;
+};
+
+const formatWorkCenter = (workCenter: WorkCenter) => {
+    return `${workCenter.key} = ${workCenter.readableName ?? 'No alternative name set'}`;
 };
 
 const networks = computed(() => {
@@ -69,10 +74,16 @@ const columnStyle = {
         <Column field="timeEstimated" header="Time Estimated" :style="columnStyle"></Column>
         <Column field="timeSpent" header="Time Spent" :style="columnStyle"></Column>
         <Column field="teamLeader" header="Team Leader" :style="columnStyle"></Column>
-        <Column field="workCenter" header="Work Center" :style="columnStyle"></Column>
+        <Column field="workCenter.key" header="Work Center" :style="columnStyle">
+            <template #body="slotProps">
+                <p v-tooltip.top="formatWorkCenter(slotProps.data.workCenter)">
+                    {{ slotProps.data.workCenter.readableName ?? slotProps.data.workCenter.key }}
+                </p>
+            </template>
+        </Column>
         <Column field="activityType.key" header="Activity Type" :style="columnStyle">
             <template #body="slotProps">
-                <div class="activity-type">
+                <div class="text-with-icon">
                     <p>{{ slotProps.data.activityType.key }}</p>
                     <i
                         class="pi pi-info-circle"
@@ -106,7 +117,7 @@ const columnStyle = {
 </template>
 
 <style lang="scss" scoped>
-.activity-type {
+.text-with-icon {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -117,6 +128,7 @@ const columnStyle = {
         color: var(--p-gray-400)
     }
 }
+
 
 .network-list {
     display: flex;

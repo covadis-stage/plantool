@@ -1,5 +1,6 @@
 import type { ActivityType } from "./ActivityType";
 import type { Project } from "./Project";
+import type { WorkCenter } from "./WorkCenter";
 
 export interface ProjectActivity {
     key: string; // = ProjectId + NetworkId + ActivityId
@@ -10,8 +11,8 @@ export interface ProjectActivity {
     timeEstimated?: string; // ISO 8601 duration
     timeSpent?: string; // ISO 8601 duration
     teamLeader?: string; // = Product Lead
-    workCenter?: string; // = Product Owner
 
+    workCenter?: WorkCenter;
     activityType?: ActivityType;
 
     workBreakdownStructure?: string;

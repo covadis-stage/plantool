@@ -17,5 +17,6 @@ public class ActivitiesService
         .Where(activity => activity.ProjectId == projectKey)
         .Where(activity => !activity.IsArchived)
         .Include(activity => activity.ActivityType)
+        .Include(activity => activity.WorkCenter)
         .ToListAsync();
 }
