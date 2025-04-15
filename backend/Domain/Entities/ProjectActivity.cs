@@ -10,6 +10,7 @@ public class ProjectActivity : IAuditable
     public TimeSpan? TimeEstimated { get; set; } // "Work" in SAP
     public TimeSpan? TimeSpent { get; set; } // "Actual Work" in SAP
     public string? TeamLeader { get; set; } // = Product Lead
+    public string? WorkCenter { get; set; }
     
     public string? ActivityTypeCode { get; set; }
     public ActivityType? ActivityType { get; set; }

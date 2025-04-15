@@ -10,6 +10,7 @@ export interface ProjectActivity {
     timeEstimated?: string; // ISO 8601 duration
     timeSpent?: string; // ISO 8601 duration
     teamLeader?: string; // = Product Lead
+    workCenter?: string; // = Product Owner
 
     activityType?: ActivityType;
 

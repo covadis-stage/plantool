@@ -15,6 +15,7 @@ export const useActivityMapper = () => {
             timeEstimated: activity.timeEstimated,
             timeSpent: activity.timeSpent,
             teamLeader: activity.teamLeader,
+            workCenter: activity.workCenter,
             activityType: activity.activityType,
             workBreakdownStructure: activity.workBreakdownStructure,
             network: activity.network,

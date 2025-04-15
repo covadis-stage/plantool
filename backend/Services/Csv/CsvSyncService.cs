@@ -73,6 +73,7 @@ public class CsvSyncService(PlantoolDbContext context, ILogger<CsvSyncService> l
         existing.TimeEstimated = imported.TimeEstimated;
         existing.TimeSpent = imported.TimeSpent;
         existing.TeamLeader = imported.TeamLeader;
+        existing.WorkCenter = imported.WorkCenter;
         existing.ActivityTypeCode = imported.ActivityTypeCode;
         existing.WorkBreakdownStructure = imported.WorkBreakdownStructure;
         existing.Network = imported.Network;

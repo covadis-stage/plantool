@@ -115,6 +115,7 @@ public static class CsvMappingService
                 TimeEstimated = ParseTimeSpan(row.Work),
                 TimeSpent = ParseTimeSpan(row.ActualWork),
                 TeamLeader = row.TeamLeader,
+                WorkCenter = row.WorkCenter,
                 ActivityTypeCode = row.ActivityCode,
                 ActivityType = activityTypes.FirstOrDefault(activityType => activityType.Key == row.ActivityCode),
                 WorkBreakdownStructure = row.WbsId,

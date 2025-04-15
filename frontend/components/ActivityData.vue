@@ -69,6 +69,7 @@ const columnStyle = {
         <Column field="timeEstimated" header="Time Estimated" :style="columnStyle"></Column>
         <Column field="timeSpent" header="Time Spent" :style="columnStyle"></Column>
         <Column field="teamLeader" header="Team Leader" :style="columnStyle"></Column>
+        <Column field="workCenter" header="Work Center" :style="columnStyle"></Column>
         <Column field="activityType.key" header="Activity Type" :style="columnStyle">
             <template #body="slotProps">
                 <div class="activity-type">
