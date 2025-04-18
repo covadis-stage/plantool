@@ -3,7 +3,7 @@ import type { Project } from "~/types/Project";
 export const useProjectStore = defineStore("ProjectStore", () => {
     const projectMapper = useProjectMapper();
     const activitiesMapper = useActivityMapper();
-    const { loading, get, post } = useApi();
+    const { loading, get } = useApi();
 
     const projects = ref<Project[]>([]);
 
