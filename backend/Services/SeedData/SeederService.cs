@@ -12,7 +12,7 @@ public class SeederService(PlantoolDbContext dbContext, ILogger<SeederService> l
     public async Task<string> SeedTeamsAndEngineersAsync(bool force)
     {
         // Start with an empty database
-        if (await _dbContext.CompetenceTeams.AnyAsync() || _dbContext.Engineers.Any() || _dbContext.ProductTeams.Any())
+        if (await _dbContext.CompetenceTeams.AnyAsync() || await _dbContext.Engineers.AnyAsync() || await _dbContext.ProductTeams.AnyAsync())
         {
             if (!force) return "Teams and engineers already exist. Use force=true to override.";
             
@@ -31,34 +31,39 @@ public class SeederService(PlantoolDbContext dbContext, ILogger<SeederService> l
         }
 
         // Add competence teams
+        string EngMechRad = "Eng mech RAD";
+        string HardwareRad = "Hardware RAD";
+        string SoftwareRad = "Software RAD";
         var competenceTeams = new List<CompetenceTeam>
         {
-            new() { Name = "Eng mech RAD" },
-            new() { Name = "Hardware RAD" },
-            new() { Name = "Software RAD" },
+            new() { Name = EngMechRad },
+            new() { Name = HardwareRad },
+            new() { Name = SoftwareRad },
         };
         _dbContext.CompetenceTeams.AddRange(competenceTeams);
 
         // Add product teams and link them to competence teams
+#pragma warning disable S1192
         var productTeams = new List<ProductTeam>
         {
-            new() { Name = "Pastry Mechanical", CompetenceTeamName = "Eng mech RAD" },
-            new() { Name = "Bread Hardware", CompetenceTeamName = "Hardware RAD" },
-            new() { Name = "Pie and Deco Software", CompetenceTeamName = "Software RAD" },
-            new() { Name = "Pastry Software", CompetenceTeamName = "Software RAD" },
-            new() { Name = "Bread Mechanical", CompetenceTeamName = "Eng mech RAD" },
-            new() { Name = "Pie and Deco Hardware", CompetenceTeamName = "Hardware RAD" },
-            new() { Name = "Cake Mechanical", CompetenceTeamName = "Eng mech RAD" },
-            new() { Name = "Cookie", CompetenceTeamName = "Hardware RAD" },
-            new() { Name = "Muffin_S", CompetenceTeamName = "Software RAD" },
-            new() { Name = "Donut Mechanical", CompetenceTeamName = "Eng mech RAD" },
-            new() { Name = "Brownie", CompetenceTeamName = "Hardware RAD" },
-            new() { Name = "Cupcake", CompetenceTeamName = "Software RAD" },
-            new() { Name = "Tart Mechanical", CompetenceTeamName = "Eng mech RAD" },
-            new() { Name = "Bagel Hardware", CompetenceTeamName = "Hardware RAD" },
-            new() { Name = "Croissant", CompetenceTeamName = "Software RAD" },
+            new() { Name = "Pastry Mechanical", CompetenceTeamName = EngMechRad },
+            new() { Name = "Bread Hardware", CompetenceTeamName = HardwareRad },
+            new() { Name = "Pie and Deco Software", CompetenceTeamName = SoftwareRad },
+            new() { Name = "Pastry Software", CompetenceTeamName = SoftwareRad },
+            new() { Name = "Bread Mechanical", CompetenceTeamName = EngMechRad },
+            new() { Name = "Pie and Deco Hardware", CompetenceTeamName = HardwareRad },
+            new() { Name = "Cake Mechanical", CompetenceTeamName = EngMechRad },
+            new() { Name = "Cookie", CompetenceTeamName = HardwareRad },
+            new() { Name = "Muffin_S", CompetenceTeamName = SoftwareRad },
+            new() { Name = "Donut Mechanical", CompetenceTeamName = EngMechRad },
+            new() { Name = "Brownie", CompetenceTeamName = HardwareRad },
+            new() { Name = "Cupcake", CompetenceTeamName = SoftwareRad },
+            new() { Name = "Tart Mechanical", CompetenceTeamName = EngMechRad },
+            new() { Name = "Bagel Hardware", CompetenceTeamName = HardwareRad },
+            new() { Name = "Croissant", CompetenceTeamName = SoftwareRad },
             new() { Name = "Eclair Mechanical", CompetenceTeamName = "Eng mech RAD" },
         };
+#pragma warning restore S1192
         foreach (var productTeam in productTeams)
         {
             var competenceTeam = competenceTeams.FirstOrDefault(ct => ct.Name == productTeam.CompetenceTeamName);

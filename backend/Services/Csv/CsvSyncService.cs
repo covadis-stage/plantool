@@ -50,13 +50,13 @@ public class CsvSyncService(PlantoolDbContext context, ILogger<CsvSyncService> l
             UpdateEntity(existingEntity, entity);
         }
 
-        _logger.LogInformation(
-            "\n----------------------------------------\n" +
-            $"Archiving {toArchive.Count} of type {imported.First().GetType().Name}...\n" +
-            $"Creating {toCreate.Count} of type {imported.First().GetType().Name}...\n" +
-            $"Updating {toUpdate.Count} of type {imported.First().GetType().Name}..." +
-            "\n----------------------------------------"
-        );
+        _logger.LogInformation("\n----------------------------------------\nArchiving {ArchiveCount} of type {ArchiveEntityType},\nCreating {CreateCount} of type {CreateEntityType},\nUpdating {UpdateCount} of type {UpdateEntityType}\n----------------------------------------",
+            toArchive.Count, 
+            imported.FirstOrDefault()?.GetType().Name ?? "Unknown", 
+            toCreate.Count, 
+            imported.FirstOrDefault()?.GetType().Name ?? "Unknown", 
+            toUpdate.Count, 
+            imported.FirstOrDefault()?.GetType().Name ?? "Unknown");
     }
 
     private void UpdateEntity(IAuditable existingEntity, IAuditable importedEntity)
