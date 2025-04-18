@@ -3,7 +3,7 @@ using plantool.Data;
 using plantool.Domain.Dtos;
 using plantool.Domain.Entities;
 
-namespace plantool.Services.CsvService;
+namespace plantool.Services.Csv;
 
 public class CsvSyncService(PlantoolDbContext context, ILogger<CsvSyncService> logger)
 {
@@ -15,9 +15,13 @@ public class CsvSyncService(PlantoolDbContext context, ILogger<CsvSyncService> l
         csvData.Projects.ForEach(p => p.Activities = []);
         csvData.ProjectActivities.ForEach(pa => pa.ActivityType = null!);
         csvData.ProjectActivities.ForEach(pa => pa.Project = null!);
+        csvData.ProjectActivities.ForEach(pa => pa.WorkCenter = null!);
 
         var existingActivityTypes = await _context.ActivityTypes.ToListAsync() ?? [];
         SyncAuditable(existingActivityTypes.Cast<IAuditable>().ToList(), csvData.ActivityTypes.Cast<IAuditable>().ToList());
+
+        var existingWorkCenters = await _context.WorkCenters.ToListAsync() ?? [];
+        SyncAuditable(existingWorkCenters.Cast<IAuditable>().ToList(), csvData.WorkCenters.Cast<IAuditable>().ToList());
 
         var existingProjects = await _context.Projects.ToListAsync() ?? [];
         SyncAuditable(existingProjects.Cast<IAuditable>().ToList(), csvData.Projects.Cast<IAuditable>().ToList());
@@ -46,13 +50,13 @@ public class CsvSyncService(PlantoolDbContext context, ILogger<CsvSyncService> l
             UpdateEntity(existingEntity, entity);
         }
 
-        _logger.LogInformation(
-            "\n----------------------------------------\n" +
-            $"Archiving {toArchive.Count} of type {imported.First().GetType().Name}...\n" +
-            $"Creating {toCreate.Count} of type {imported.First().GetType().Name}...\n" +
-            $"Updating {toUpdate.Count} of type {imported.First().GetType().Name}..." +
-            "\n----------------------------------------"
-        );
+        _logger.LogInformation("\n----------------------------------------\nArchiving {ArchiveCount} of type {ArchiveEntityType},\nCreating {CreateCount} of type {CreateEntityType},\nUpdating {UpdateCount} of type {UpdateEntityType}\n----------------------------------------",
+            toArchive.Count, 
+            imported.FirstOrDefault()?.GetType().Name ?? "Unknown", 
+            toCreate.Count, 
+            imported.FirstOrDefault()?.GetType().Name ?? "Unknown", 
+            toUpdate.Count, 
+            imported.FirstOrDefault()?.GetType().Name ?? "Unknown");
     }
 
     private void UpdateEntity(IAuditable existingEntity, IAuditable importedEntity)
@@ -73,6 +77,7 @@ public class CsvSyncService(PlantoolDbContext context, ILogger<CsvSyncService> l
         existing.TimeEstimated = imported.TimeEstimated;
         existing.TimeSpent = imported.TimeSpent;
         existing.TeamLeader = imported.TeamLeader;
+        existing.WorkCenter = imported.WorkCenter;
         existing.ActivityTypeCode = imported.ActivityTypeCode;
         existing.WorkBreakdownStructure = imported.WorkBreakdownStructure;
         existing.Network = imported.Network;

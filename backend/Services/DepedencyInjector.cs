@@ -1,4 +1,7 @@
-using plantool.Services.CsvService;
+using plantool.Services.Activities;
+using plantool.Services.Csv;
+using plantool.Services.Projects;
+using plantool.Services.SeedData;
 
 namespace plantool.Services;
 
@@ -9,5 +12,8 @@ public static class DependencyInjector
         services.AddScoped<CsvProcessingService>();
         services.AddScoped<CsvSyncService>();
         services.AddSingleton<IFileReader, CsvFileReader>();
+        services.AddScoped<ProjectsService>();
+        services.AddScoped<ActivitiesService>();
+        services.AddScoped<SeederService>();
     }
 }

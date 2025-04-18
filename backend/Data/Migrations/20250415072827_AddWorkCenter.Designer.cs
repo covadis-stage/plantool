@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using plantool.Data;
 
@@ -11,9 +12,11 @@ using plantool.Data;
 namespace plantool.Migrations
 {
     [DbContext(typeof(PlantoolDbContext))]
-    partial class PlantoolDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250415072827_AddWorkCenter")]
+    partial class AddWorkCenter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,8 +180,8 @@ namespace plantool.Migrations
                     b.Property<string>("WorkBreakdownStructure")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("WorkCenterKey")
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("WorkCenter")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Key");
 
@@ -186,26 +189,7 @@ namespace plantool.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("WorkCenterKey");
-
                     b.ToTable("Activities");
-                });
-
-            modelBuilder.Entity("plantool.Domain.Entities.WorkCenter", b =>
-                {
-                    b.Property<string>("Key")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool>("IsArchived")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ReadableName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Key");
-
-                    b.ToTable("WorkCenters");
                 });
 
             modelBuilder.Entity("plantool.Domain.Entities.Engineer", b =>
@@ -249,15 +233,9 @@ namespace plantool.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("plantool.Domain.Entities.WorkCenter", "WorkCenter")
-                        .WithMany()
-                        .HasForeignKey("WorkCenterKey");
-
                     b.Navigation("ActivityType");
 
                     b.Navigation("Project");
-
-                    b.Navigation("WorkCenter");
                 });
 
             modelBuilder.Entity("plantool.Domain.Entities.CompetenceTeam", b =>

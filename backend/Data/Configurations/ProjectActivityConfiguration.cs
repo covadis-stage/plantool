@@ -17,6 +17,10 @@ public class ProjectActivityConfiguration : IEntityTypeConfiguration<ProjectActi
             .WithMany()
             .HasForeignKey(pa => pa.ActivityTypeCode);
 
+        builder.HasOne(pa => pa.WorkCenter)
+            .WithMany()
+            .HasForeignKey(pa => pa.WorkCenterKey);
+
         builder.HasOne(pa => pa.Project)
             .WithMany(p => p.Activities)
             .HasForeignKey(pa => pa.ProjectId);
