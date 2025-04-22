@@ -30,5 +30,13 @@ public class ProjectActivityConfiguration : IEntityTypeConfiguration<ProjectActi
 
         builder.Property(pa => pa.TimeSpent)
             .HasConversion<long?>();
+
+        builder.HasOne(pa => pa.Delegator)
+            .WithMany()
+            .HasForeignKey(pa => pa.DelegatorId);
+
+        builder.HasOne(pa => pa.Engineer)
+            .WithMany()
+            .HasForeignKey(pa => pa.EngineerId);
     }
 }

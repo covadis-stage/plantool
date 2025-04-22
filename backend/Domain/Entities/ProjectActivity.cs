@@ -32,5 +32,11 @@ public class ProjectActivity : IAuditable
     public DateOnly? ActualFinishDate { get; set; } // PL. Latest Finish Date
     public TimeSpan? AbsoluteWorkload { get; set; } // PL. Absolute Workload
 
+    public string? DelegatorId { get; set; } // PL. Workcenter
+    public Engineer? Delegator { get; set; } // PL. Workcenter
+
+    public string? EngineerId { get; set; } // PL. Engineer
+    public Engineer? Engineer { get; set; } // PL. Engineer
+
 }
 
