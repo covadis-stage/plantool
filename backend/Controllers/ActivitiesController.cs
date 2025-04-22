@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using plantool.Domain.Dtos;
 using plantool.Services.Activities;
 
 namespace plantool.Controllers;
@@ -18,5 +19,15 @@ public class ActivitiesController : ControllerBase
     {
         var activities = await _activitiesService.GetActivitiesByProjectKeyAsync(projectKey);
         return Ok(activities);
+    }
+
+    [HttpPut("bulk-update")]
+    public async Task<IActionResult> BulkUpdate([FromBody] BulkUpdateRequest request)
+    {
+        if (request == null || request.ActivityKeys == null || request.ActivityKeys.Count == 0)
+            return BadRequest("Invalid request.");
+
+        await _activitiesService.BulkUpdate(request);
+        return Ok("Activities updated successfully.");
     }
 }
