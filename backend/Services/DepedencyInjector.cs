@@ -1,5 +1,6 @@
 using plantool.Services.Activities;
 using plantool.Services.Csv;
+using plantool.Services.Engineers;
 using plantool.Services.Projects;
 using plantool.Services.SeedData;
 
@@ -15,5 +16,6 @@ public static class DependencyInjector
         services.AddScoped<ProjectsService>();
         services.AddScoped<ActivitiesService>();
         services.AddScoped<SeederService>();
+        services.AddScoped<EngineersService>();
     }
 }
