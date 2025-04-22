@@ -2,7 +2,6 @@
 import type { ProjectActivity } from '~/types/Activity';
 import type { ActivityType } from '~/types/ActivityType';
 import Popover from "primevue/popover";
-import type DataTable from 'primevue/datatable';
 import type { WorkCenter } from '~/types/WorkCenter';
 
 const props = defineProps<{
@@ -66,22 +65,22 @@ const columnStyle = {
         group-rows-by="network"
     >
         <Column field="network" header="Network" :style="columnStyle"></Column>
-        <Column field="workBreakdownStructure" header="WBS" :style="columnStyle"></Column>
-        <Column field="id" header="Activity" :style="columnStyle"></Column>
-        <Column field="latestStartDate" header="Latest Start Date" :style="columnStyle"></Column>
-        <Column field="latestFinishDate" header="Latest Finish Date" :style="columnStyle"></Column>
-        <Column field="originalFinishDate" header="Original Finish Date" :style="columnStyle"></Column>
-        <Column field="timeEstimated" header="Time Estimated" :style="columnStyle"></Column>
-        <Column field="timeSpent" header="Time Spent" :style="columnStyle"></Column>
+        <Column field="workBreakdownStructure" header="WBS" :style="columnStyle" style="width: 210px"></Column>
+        <Column field="id" header="Activity" :style="columnStyle" style="width: 80px"></Column>
+        <Column field="latestStartDate" header="Latest Start Date" :style="columnStyle" style="width: 120px"></Column>
+        <Column field="latestFinishDate" header="Latest Finish Date" :style="columnStyle" style="width: 120px"></Column>
+        <Column field="originalFinishDate" header="Original Finish Date" :style="columnStyle" style="width: 120px"></Column>
+        <Column field="timeEstimated" header="Time Estimated" :style="columnStyle" style="width: 100px"></Column>
+        <Column field="timeSpent" header="Time Spent" :style="columnStyle" style="width: 100px"></Column>
         <Column field="teamLeader" header="Team Leader" :style="columnStyle"></Column>
-        <Column field="workCenter.key" header="Work Center" :style="columnStyle">
+        <Column field="workCenter.key" header="Work Center" :style="columnStyle" style="width: 240px">
             <template #body="slotProps">
-                <p v-tooltip.top="formatWorkCenter(slotProps.data.workCenter)">
+                <p v-tooltip.top="formatWorkCenter(slotProps.data.workCenter)" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                     {{ slotProps.data.workCenter.readableName ?? slotProps.data.workCenter.key }}
                 </p>
             </template>
         </Column>
-        <Column field="activityType.key" header="Activity Type" :style="columnStyle">
+        <Column field="activityType.key" header="Activity Type" :style="columnStyle" style="width: 90px">
             <template #body="slotProps">
                 <div class="text-with-icon">
                     <p>{{ slotProps.data.activityType.key }}</p>
