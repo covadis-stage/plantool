@@ -19,6 +19,8 @@ public class ActivitiesService
         .Where(activity => !activity.IsArchived)
         .Include(activity => activity.ActivityType)
         .Include(activity => activity.WorkCenter)
+        .Include(activity => activity.Engineer)
+        .Include(activity => activity.Delegator)
         .ToListAsync();
 
     public async Task BulkUpdate(BulkUpdateRequest request)
