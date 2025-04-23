@@ -30,4 +30,14 @@ public class ActivitiesController : ControllerBase
         await _activitiesService.BulkUpdate(request);
         return Ok("Activities updated successfully.");
     }
+
+    [HttpDelete("bulk-delete")]
+    public async Task<IActionResult> BulkDelete([FromBody] BulkDeleteRequest request)
+    {
+        if (request == null || request.ActivityKeys == null || request.ActivityKeys.Count == 0)
+            return BadRequest("Invalid request.");
+
+        await _activitiesService.BulkDelete(request);
+        return Ok("Activities deleted successfully.");
+    }
 }

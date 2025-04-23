@@ -10,10 +10,14 @@ const props = defineProps<{
 }>();
 
 const onChange = async (changeEvent: SelectChangeEvent) => {
+    if (changeEvent.value == null) {
+        await engineerStore.bulkDelete([props.activityKey], props.assignAs);
+        return;
+    }
     if (props.assignAs === "delegator") {
         await engineerStore.setDelegatorOnActivities([props.activityKey], changeEvent.value);
     } else if (props.assignAs === "engineer") {
-
+        await engineerStore.setEngineerOnActivities([props.activityKey], changeEvent.value);
     }
 }
 
@@ -24,13 +28,14 @@ onMounted(() => {
 
 <template>
     <Select
-        :options="engineerStore.delegators"
+        :options="assignAs === 'delegator' ? engineerStore.delegators : engineerStore.engineers"
         option-value="id"
         option-label="name"
         :placeholder="'Assign ' + props.assignAs"
         :loading="engineerStore.loading"
         :default-value="props.current?.id"
         filter
+        show-clear
         @change="onChange"
     >
 

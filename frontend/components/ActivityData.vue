@@ -72,7 +72,7 @@ const columnStyle = {
         <Column field="originalFinishDate" header="Original Finish Date" :style="columnStyle" style="width: 120px"></Column>
         <Column field="timeEstimated" header="Time Estimated" :style="columnStyle" style="width: 100px"></Column>
         <Column field="timeSpent" header="Time Spent" :style="columnStyle" style="width: 100px"></Column>
-        <Column field="teamLeader" header="Team Leader" :style="columnStyle"></Column>
+        <Column field="teamLeader" header="Team Leader" :style="columnStyle" style="width: 200px"></Column>
         <Column field="workCenter.key" header="Work Center" :style="columnStyle" style="width: 240px">
             <template #body="slotProps">
                 <p v-tooltip.top="formatWorkCenter(slotProps.data.workCenter)" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
@@ -97,6 +97,16 @@ const columnStyle = {
                     :activity-key="slotProps.data.key"
                     assign-as="delegator"
                     :current="slotProps.data.delegator"
+                >
+                </EngineerAssignment>
+            </template>
+        </Column>
+        <Column field="engineer" header="Engineer" :style="columnStyle" style="width: 120px">
+            <template #body="slotProps">
+                <EngineerAssignment
+                    :activity-key="slotProps.data.key"
+                    assign-as="engineer"
+                    :current="slotProps.data.engineer"
                 >
                 </EngineerAssignment>
             </template>

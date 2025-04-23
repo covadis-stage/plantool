@@ -41,6 +41,22 @@ public class ActivitiesService
         await _dbContext.SaveChangesAsync();
     }
 
+    internal async Task BulkDelete(BulkDeleteRequest request)
+    {
+        var activities = await _dbContext.Activities
+            .Where(activity => request.ActivityKeys.Contains(activity.Key))
+            .ToListAsync();
+
+        foreach (var activity in activities)
+        {
+            if (request.Delegator == true)
+                activity.DelegatorId = null;
+
+            if (request.Engineer == true)
+                activity.EngineerId = null;
+        }
+    }
+
     private async Task SetDelegator(ProjectActivity activity, string delegatorId)
     {
         var delegator = await _dbContext.Engineers.FindAsync(delegatorId) ?? throw new InvalidOperationException($"Delegator with ID '{delegatorId}' not found.");

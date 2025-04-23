@@ -3,7 +3,7 @@ import type { Engineer } from "~/types/Engineer";
 
 export const useEngineerStore = defineStore("EngineerStore", () => {
     const engineerMapper = useEngineerMapper();
-    const { loading, get, put } = useApi();
+    const { loading, get, put, del } = useApi();
 
     const engineers = ref<Engineer[]>([]);
     const delegators = computed(() => {
@@ -38,6 +38,32 @@ export const useEngineerStore = defineStore("EngineerStore", () => {
         }
     }
 
+    const setEngineerOnActivities = async (activities: string[], engineerId: string) => {
+        try {
+            await put('Activities/bulk-update', {
+                activityKeys: activities,
+                engineerId: engineerId,
+            })
+            return true
+        } catch (err) {
+            console.error(err);
+            return false
+        }
+    }
+
+    const bulkDelete = async (activities: string[], toDelete: "delegator" | "engineer") => {
+        try {
+            await del('Activities/bulk-delete', {
+                activityKeys: activities,
+                [toDelete]: true,
+            })
+            return true
+        } catch (err) {
+            console.error(err);
+            return false
+        }
+    }
+
 
     return {
         loading,
@@ -45,5 +71,7 @@ export const useEngineerStore = defineStore("EngineerStore", () => {
         delegators,
         getEngineers,
         setDelegatorOnActivities,
+        setEngineerOnActivities,
+        bulkDelete,
     }
 });
