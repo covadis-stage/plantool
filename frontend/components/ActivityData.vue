@@ -91,6 +91,16 @@ const columnStyle = {
                 </div>
             </template>
         </Column>
+        <Column field="delegator" header="Delegator" :style="columnStyle" style="width: 120px">
+            <template #body="slotProps">
+                <EngineerAssignment
+                    :activity-key="slotProps.data.key"
+                    assign-as="delegator"
+                    :current="slotProps.data.delegator"
+                >
+                </EngineerAssignment>
+            </template>
+        </Column>
         <template #groupheader="slotProps">
             <Button
                 :label="slotProps.data.network"
