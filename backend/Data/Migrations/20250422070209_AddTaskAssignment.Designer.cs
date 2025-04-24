@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using plantool.Data;
 
@@ -11,9 +12,11 @@ using plantool.Data;
 namespace plantool.Migrations
 {
     [DbContext(typeof(PlantoolDbContext))]
-    partial class PlantoolDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250422070209_AddTaskAssignment")]
+    partial class AddTaskAssignment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

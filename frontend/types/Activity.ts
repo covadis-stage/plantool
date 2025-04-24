@@ -1,4 +1,5 @@
 import type { ActivityType } from "./ActivityType";
+import type { Engineer } from "./Engineer";
 import type { Project } from "./Project";
 import type { WorkCenter } from "./WorkCenter";
 
@@ -26,4 +27,6 @@ export interface ProjectActivity {
     actualStartDate?: string; // ISO date string
     actualFinishDate?: string; // ISO date string
     absoluteWorkload?: string; // ISO 8601 duration
+    delegator?: Engineer; // = PL. Workcenter
+    engineer?: Engineer;
 }

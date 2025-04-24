@@ -16,16 +16,13 @@ onMounted(() => {
     >
         <i class="pi pi-spin pi-spinner"></i>
     </div>
-    <VirtualScroller
+
+    <ProjectData
         v-else-if="projectStore.projects.length > 0"
-        :items="projectStore.projects"
-        :itemSize="50"
-        scroll-height="100%"
-    >
-        <template v-slot:item="{ item }">
-            <ProjectData :project="item"></ProjectData>
-        </template>
-    </VirtualScroller>
+        v-for="project in projectStore.projects"
+        :key="project.key"
+        :project="project"
+    ></ProjectData>
 </template>
 
 <style lang="scss" scoped>

@@ -37,9 +37,45 @@ export const useApi = () => {
         return json;
     }
 
+    const put = async (url: string, body: any) => {
+        loading.value = true;
+        if (!apiUrl) throw new Error('API URL is not defined in the environment variables.');
+        const response = await fetch(`${apiUrl}/${url}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify(body),
+        });
+        if (!response.ok) throw new Error(`Error during PUT: ${response.statusText}`);
+        const json = await response.json();
+        loading.value = false;
+        return json;
+    }
+
+    const del = async (url: string, body: any) => {
+        loading.value = true;
+        if (!apiUrl) throw new Error('API URL is not defined in the environment variables.');
+        const response = await fetch(`${apiUrl}/${url}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify(body),
+        });
+        if (!response.ok) throw new Error(`Error during DELETE: ${response.statusText}`);
+        const json = await response.json();
+        loading.value = false;
+        return json;
+    }
+
     return {
         loading,
         get,
         post,
+        put,
+        del,
     }
 }
