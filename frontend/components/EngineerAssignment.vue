@@ -3,6 +3,7 @@ import type { SelectChangeEvent } from 'primevue';
 import type { Engineer } from '~/types/Engineer';
 
 const engineerStore = useEngineerStore();
+const activityStore = useActivityStore();
 const props = defineProps<{
     activityKey: string;
     assignAs: "delegator" | "engineer";
@@ -15,11 +16,11 @@ const onChange = async (changeEvent: SelectChangeEvent) => {
     if (changeEvent.value == previousValue.value) return;
 
     if (changeEvent.value == null) {
-        await engineerStore.bulkDelete([props.activityKey], props.assignAs);
+        await activityStore.bulkDelete([props.activityKey], props.assignAs);
     } else if (props.assignAs === "delegator") {
-        await engineerStore.setDelegatorOnActivities([props.activityKey], changeEvent.value);
+        await activityStore.setDelegatorOnActivities([props.activityKey], changeEvent.value);
     } else if (props.assignAs === "engineer") {
-        await engineerStore.setEngineerOnActivities([props.activityKey], changeEvent.value);
+        await activityStore.setEngineerOnActivities([props.activityKey], changeEvent.value);
     }
     previousValue.value = changeEvent.value;
 }
@@ -36,16 +37,14 @@ onMounted(() => {
         option-value="id"
         option-label="name"
         :placeholder="'Assign ' + props.assignAs"
-        :loading="engineerStore.loading"
+        :loading="activityStore.loading"
         :default-value="props.current?.id"
         filter
         show-clear
         @change="onChange"
         style="width: 200px"
         size="small"
-    >
-
-    </Select>
+    ></Select>
 </template>
 
 <style lang="scss">

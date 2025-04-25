@@ -12,9 +12,9 @@ export const useActivityMapper = () => {
         return {
             key: activity.key,
             id: activity.id,
-            latestStartDate: activity.latestStartDate,
-            latestFinishDate: activity.latestFinishDate,
-            originalFinishDate: activity.originalFinishDate,
+            latestStartDate: mapDate(activity.latestStartDate),
+            latestFinishDate: mapDate(activity.latestFinishDate),
+            originalFinishDate: mapDate(activity.originalFinishDate),
             timeEstimated: activity.timeEstimated,
             timeSpent: activity.timeSpent,
             teamLeader: activity.teamLeader,
@@ -25,12 +25,22 @@ export const useActivityMapper = () => {
             project: activity.project,
             isArchived: activity.isArchived,
             generalRemark: activity.generalRemark,
-            actualStartDate: activity.actualStartDate,
-            actualFinishDate: activity.actualFinishDate,
+            actualStartDate: mapDate(activity.actualStartDate),
+            actualFinishDate: mapDate(activity.actualFinishDate),
             absoluteWorkload: activity.absoluteWorkload,
             delegator: engineerMapper.mapEngineer(activity.delegator),
             engineer: engineerMapper.mapEngineer(activity.engineer),
         } as ProjectActivity;
+    }
+
+    const mapDate = (date?: string): Date | undefined => {
+        if (!date) return undefined;
+        const parsedDate = new Date(date);
+        if (isNaN(parsedDate.getTime())) {
+            console.error(`Invalid date format: ${date}`);
+            return undefined;
+        }
+        return parsedDate;
     }
 
     return {

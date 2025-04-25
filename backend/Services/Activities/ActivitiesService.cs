@@ -36,12 +36,18 @@ public class ActivitiesService
 
             if (request.EngineerId != null)
                 await SetEngineer(activity, request.EngineerId);
+
+            if (request.ActualFinishDate != null)
+                activity.ActualFinishDate = request.ActualFinishDate.Value;
+
+            if (request.ActualStartDate != null)
+                activity.ActualStartDate = request.ActualStartDate.Value;
         }
 
         await _dbContext.SaveChangesAsync();
     }
 
-    internal async Task BulkDelete(BulkDeleteRequest request)
+    public async Task BulkDelete(BulkDeleteRequest request)
     {
         var activities = await _dbContext.Activities
             .Where(activity => request.ActivityKeys.Contains(activity.Key))
@@ -54,7 +60,15 @@ public class ActivitiesService
 
             if (request.Engineer == true)
                 activity.EngineerId = null;
+
+            if (request.ActualFinishDate == true)
+                activity.ActualFinishDate = null;
+
+            if (request.ActualStartDate == true)
+                activity.ActualStartDate = null;
         }
+
+        await _dbContext.SaveChangesAsync();
     }
 
     private async Task SetDelegator(ProjectActivity activity, string delegatorId)
