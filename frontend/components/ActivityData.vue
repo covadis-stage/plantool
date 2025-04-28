@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import type { ProjectActivity } from '~/types/Activity';
 import type { ActivityType } from '~/types/ActivityType';
-import Popover from "primevue/popover";
 import type { WorkCenter } from '~/types/WorkCenter';
-import { timeSpanToString } from '~/types/TimeSpan';
+import Popover from "primevue/popover";
 
 const { formatDate } = useUtil();
 const props = defineProps<{
@@ -99,12 +98,12 @@ const getActivityClasses = (activity: ProjectActivity) => {
         </Column>
         <Column field="timeEstimated" header="Time Estimated" style="min-width: 130px">
             <template #body="slotProps">
-               {{ timeSpanToString(slotProps.data.timeEstimated) }}
+               <ReadableTimeSpan :time-span="slotProps.data.timeEstimated"></ReadableTimeSpan>
             </template>
         </Column>
         <Column field="timeSpent" header="Time Spent" style="min-width: 130px">
             <template #body="slotProps">
-                {{ timeSpanToString(slotProps.data.timeEstimated) }}
+                <ReadableTimeSpan :time-span="slotProps.data.timeSpent"></ReadableTimeSpan>
             </template>
         </Column>
         <Column field="teamLeader" header="Team Leader" style="width: 200px"></Column>
