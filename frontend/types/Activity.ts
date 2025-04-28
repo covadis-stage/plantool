@@ -1,7 +1,7 @@
 import type { ActivityType } from "./ActivityType";
 import type { Engineer } from "./Engineer";
 import type { Project } from "./Project";
-import type { TimeSpan } from "./Timespan";
+import type { TimeSpan } from "./TimeSpan";
 import type { WorkCenter } from "./WorkCenter";
 
 export interface ProjectActivity {

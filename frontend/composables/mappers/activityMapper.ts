@@ -1,6 +1,6 @@
 import type { ProjectActivity } from "~/types/Activity";
 import { useEngineerMapper } from "./engineerMapper";
-import { parseTimeSpan } from "~/types/Timespan";
+import { parseTimeSpan } from "~/types/TimeSpan";
 
 export const useActivityMapper = () => {
     const engineerMapper = useEngineerMapper();

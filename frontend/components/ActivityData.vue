@@ -3,7 +3,7 @@ import type { ProjectActivity } from '~/types/Activity';
 import type { ActivityType } from '~/types/ActivityType';
 import Popover from "primevue/popover";
 import type { WorkCenter } from '~/types/WorkCenter';
-import { timeSpanToString } from '~/types/Timespan';
+import { timeSpanToString } from '~/types/TimeSpan';
 
 const { formatDate } = useUtil();
 const props = defineProps<{
