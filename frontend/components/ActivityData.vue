@@ -3,6 +3,7 @@ import type { ProjectActivity } from '~/types/Activity';
 import type { ActivityType } from '~/types/ActivityType';
 import Popover from "primevue/popover";
 import type { WorkCenter } from '~/types/WorkCenter';
+import { timeSpanToString } from '~/types/Timespan';
 
 const { formatDate } = useUtil();
 const props = defineProps<{
@@ -96,8 +97,16 @@ const getActivityClasses = (activity: ProjectActivity) => {
                 {{ formatDate(slotProps.data.originalFinishDate) }}
             </template>
         </Column>
-        <Column field="timeEstimated" header="Time Estimated" style="width: 100px"></Column>
-        <Column field="timeSpent" header="Time Spent" style="width: 100px"></Column>
+        <Column field="timeEstimated" header="Time Estimated" style="min-width: 130px">
+            <template #body="slotProps">
+               {{ timeSpanToString(slotProps.data.timeEstimated) }}
+            </template>
+        </Column>
+        <Column field="timeSpent" header="Time Spent" style="min-width: 130px">
+            <template #body="slotProps">
+                {{ timeSpanToString(slotProps.data.timeEstimated) }}
+            </template>
+        </Column>
         <Column field="teamLeader" header="Team Leader" style="width: 200px"></Column>
         <Column field="workCenter.key" header="Work Center" style="width: 240px">
             <template #body="slotProps">

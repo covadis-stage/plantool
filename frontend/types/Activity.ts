@@ -1,6 +1,7 @@
 import type { ActivityType } from "./ActivityType";
 import type { Engineer } from "./Engineer";
 import type { Project } from "./Project";
+import type { TimeSpan } from "./Timespan";
 import type { WorkCenter } from "./WorkCenter";
 
 export interface ProjectActivity {
@@ -9,8 +10,8 @@ export interface ProjectActivity {
     latestStartDate?: Date;
     latestFinishDate?: Date;
     originalFinishDate?: Date;
-    timeEstimated?: string; // ISO 8601 duration
-    timeSpent?: string; // ISO 8601 duration
+    timeEstimated?: TimeSpan;
+    timeSpent?: TimeSpan;
     teamLeader?: string; // = Product Lead
 
     workCenter?: WorkCenter;
@@ -26,7 +27,7 @@ export interface ProjectActivity {
     generalRemark?: string;
     actualStartDate?: Date;
     actualFinishDate?: Date;
-    absoluteWorkload?: string; // ISO 8601 duration
+    absoluteWorkload?: TimeSpan;
     delegator?: Engineer; // = PL. Workcenter
     engineer?: Engineer;
 }

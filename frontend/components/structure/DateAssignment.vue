@@ -99,7 +99,6 @@ const onChange = async (value: Date | Date[] | (Date | null)[] | null | undefine
 
 .sap-selected-date {
     font-weight: 700;
-    // background-color: var(--p-blue-100);
     font-style: italic;
     text-decoration: underline;
     padding: 1rem;

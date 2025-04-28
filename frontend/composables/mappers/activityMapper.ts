@@ -1,5 +1,6 @@
 import type { ProjectActivity } from "~/types/Activity";
 import { useEngineerMapper } from "./engineerMapper";
+import { parseTimeSpan } from "~/types/Timespan";
 
 export const useActivityMapper = () => {
     const engineerMapper = useEngineerMapper();
@@ -15,8 +16,8 @@ export const useActivityMapper = () => {
             latestStartDate: mapDate(activity.latestStartDate),
             latestFinishDate: mapDate(activity.latestFinishDate),
             originalFinishDate: mapDate(activity.originalFinishDate),
-            timeEstimated: activity.timeEstimated,
-            timeSpent: activity.timeSpent,
+            timeEstimated: parseTimeSpan(activity.timeEstimated),
+            timeSpent: parseTimeSpan(activity.timeSpent),
             teamLeader: activity.teamLeader,
             workCenter: activity.workCenter,
             activityType: activity.activityType,
@@ -27,7 +28,7 @@ export const useActivityMapper = () => {
             generalRemark: activity.generalRemark,
             actualStartDate: mapDate(activity.actualStartDate),
             actualFinishDate: mapDate(activity.actualFinishDate),
-            absoluteWorkload: activity.absoluteWorkload,
+            absoluteWorkload: parseTimeSpan(activity.absoluteWorkload),
             delegator: engineerMapper.mapEngineer(activity.delegator),
             engineer: engineerMapper.mapEngineer(activity.engineer),
         } as ProjectActivity;
