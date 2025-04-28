@@ -1,16 +1,17 @@
 import type { ActivityType } from "./ActivityType";
 import type { Engineer } from "./Engineer";
 import type { Project } from "./Project";
+import type { TimeSpan } from "./Timespan";
 import type { WorkCenter } from "./WorkCenter";
 
 export interface ProjectActivity {
     key: string; // = ProjectId + NetworkId + ActivityId
     id: string; // "Activity"(Id) in SAP
-    latestStartDate?: string; // ISO date string
-    latestFinishDate?: string; // ISO date string
-    originalFinishDate?: string; // ISO date string
-    timeEstimated?: string; // ISO 8601 duration
-    timeSpent?: string; // ISO 8601 duration
+    latestStartDate?: Date;
+    latestFinishDate?: Date;
+    originalFinishDate?: Date;
+    timeEstimated?: TimeSpan;
+    timeSpent?: TimeSpan;
     teamLeader?: string; // = Product Lead
 
     workCenter?: WorkCenter;
@@ -24,9 +25,9 @@ export interface ProjectActivity {
     isArchived: boolean;
 
     generalRemark?: string;
-    actualStartDate?: string; // ISO date string
-    actualFinishDate?: string; // ISO date string
-    absoluteWorkload?: string; // ISO 8601 duration
+    actualStartDate?: Date;
+    actualFinishDate?: Date;
+    absoluteWorkload?: TimeSpan;
     delegator?: Engineer; // = PL. Workcenter
     engineer?: Engineer;
 }

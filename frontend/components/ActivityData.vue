@@ -3,7 +3,9 @@ import type { ProjectActivity } from '~/types/Activity';
 import type { ActivityType } from '~/types/ActivityType';
 import Popover from "primevue/popover";
 import type { WorkCenter } from '~/types/WorkCenter';
+import { timeSpanToString } from '~/types/Timespan';
 
+const { formatDate } = useUtil();
 const props = defineProps<{
     activities: ProjectActivity[];
 }>();
@@ -40,13 +42,16 @@ const scrollToNetwork = (network: string) => {
         block: 'center',
     });
     popover.value?.hide();
- };
+};
 
 const getClassName = (string: string | undefined) => {
-    return string?.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase() || '';
+    return (string?.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase() || '');
 }
 
-const columnStyle = {
+const getActivityClasses = (activity: ProjectActivity) => {
+    let classes = [getClassName(activity.network)];
+
+    return classes.join(' ');
 };
 </script>
 
@@ -55,7 +60,7 @@ const columnStyle = {
         :value="activities"
         removable-sort
         striped-rows
-        :row-class="(activity) => getClassName(activity.network)"
+        :row-class="(activity) => getActivityClasses(activity)"
         scrollable
         scroll-height="80dvh"
         sort-mode="single"
@@ -64,23 +69,53 @@ const columnStyle = {
         row-group-mode="subheader"
         group-rows-by="network"
     >
-        <Column field="network" header="Network" :style="columnStyle"></Column>
-        <Column field="workBreakdownStructure" header="WBS" :style="columnStyle" style="width: 210px"></Column>
-        <Column field="id" header="Activity" :style="columnStyle" style="width: 80px"></Column>
-        <Column field="latestStartDate" header="Latest Start Date" :style="columnStyle" style="width: 120px"></Column>
-        <Column field="latestFinishDate" header="Latest Finish Date" :style="columnStyle" style="width: 120px"></Column>
-        <Column field="originalFinishDate" header="Original Finish Date" :style="columnStyle" style="width: 120px"></Column>
-        <Column field="timeEstimated" header="Time Estimated" :style="columnStyle" style="width: 100px"></Column>
-        <Column field="timeSpent" header="Time Spent" :style="columnStyle" style="width: 100px"></Column>
-        <Column field="teamLeader" header="Team Leader" :style="columnStyle" style="width: 200px"></Column>
-        <Column field="workCenter.key" header="Work Center" :style="columnStyle" style="width: 240px">
+        <Column field="network" header="Network"></Column>
+        <Column field="workBreakdownStructure" header="WBS" style="width: 210px"></Column>
+        <Column field="id" header="Activity" style="width: 80px"></Column>
+        <Column field="latestStartDate" header="Latest Start Date" style="min-width: 150px" >
+            <template #body="slotProps">
+                <DateAssignment
+                    :activity-key="slotProps.data.key"
+                    :default-date="slotProps.data.latestStartDate"
+                    :override-date="slotProps.data.actualStartDate"
+                    assign-as="actualStartDate"
+                ></DateAssignment>
+            </template>
+        </Column>
+        <Column field="latestFinishDate" header="Latest Finish Date" style="min-width: 150px">
+            <template #body="slotProps">
+                <DateAssignment
+                    :activity-key="slotProps.data.key"
+                    :default-date="slotProps.data.latestFinishDate"
+                    :override-date="slotProps.data.actualFinishDate"
+                    assign-as="actualFinishDate"
+                ></DateAssignment>
+            </template>
+        </Column>
+        <Column field="originalFinishDate" header="Original Finish Date" style="min-width: 120px">
+            <template #body="slotProps">
+                {{ formatDate(slotProps.data.originalFinishDate) }}
+            </template>
+        </Column>
+        <Column field="timeEstimated" header="Time Estimated" style="min-width: 130px">
+            <template #body="slotProps">
+               {{ timeSpanToString(slotProps.data.timeEstimated) }}
+            </template>
+        </Column>
+        <Column field="timeSpent" header="Time Spent" style="min-width: 130px">
+            <template #body="slotProps">
+                {{ timeSpanToString(slotProps.data.timeEstimated) }}
+            </template>
+        </Column>
+        <Column field="teamLeader" header="Team Leader" style="width: 200px"></Column>
+        <Column field="workCenter.key" header="Work Center" style="width: 240px">
             <template #body="slotProps">
                 <p v-tooltip.top="formatWorkCenter(slotProps.data.workCenter)" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                     {{ slotProps.data.workCenter.readableName ?? slotProps.data.workCenter.key }}
                 </p>
             </template>
         </Column>
-        <Column field="activityType.key" header="Activity Type" :style="columnStyle" style="width: 90px">
+        <Column field="activityType.key" header="Activity Type" style="width: 90px">
             <template #body="slotProps">
                 <div class="text-with-icon">
                     <p>{{ slotProps.data.activityType.key }}</p>
@@ -91,7 +126,7 @@ const columnStyle = {
                 </div>
             </template>
         </Column>
-        <Column field="delegator" header="Delegator" :style="columnStyle" style="width: 120px">
+        <Column field="delegator" header="Delegator" style="width: 120px">
             <template #body="slotProps">
                 <EngineerAssignment
                     :activity-key="slotProps.data.key"
@@ -101,7 +136,7 @@ const columnStyle = {
                 </EngineerAssignment>
             </template>
         </Column>
-        <Column field="engineer" header="Engineer" :style="columnStyle" style="width: 120px">
+        <Column field="engineer" header="Engineer" style="width: 120px">
             <template #body="slotProps">
                 <EngineerAssignment
                     :activity-key="slotProps.data.key"

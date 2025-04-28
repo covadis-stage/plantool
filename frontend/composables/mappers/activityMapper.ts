@@ -1,5 +1,6 @@
 import type { ProjectActivity } from "~/types/Activity";
 import { useEngineerMapper } from "./engineerMapper";
+import { parseTimeSpan } from "~/types/Timespan";
 
 export const useActivityMapper = () => {
     const engineerMapper = useEngineerMapper();
@@ -12,11 +13,11 @@ export const useActivityMapper = () => {
         return {
             key: activity.key,
             id: activity.id,
-            latestStartDate: activity.latestStartDate,
-            latestFinishDate: activity.latestFinishDate,
-            originalFinishDate: activity.originalFinishDate,
-            timeEstimated: activity.timeEstimated,
-            timeSpent: activity.timeSpent,
+            latestStartDate: mapDate(activity.latestStartDate),
+            latestFinishDate: mapDate(activity.latestFinishDate),
+            originalFinishDate: mapDate(activity.originalFinishDate),
+            timeEstimated: parseTimeSpan(activity.timeEstimated),
+            timeSpent: parseTimeSpan(activity.timeSpent),
             teamLeader: activity.teamLeader,
             workCenter: activity.workCenter,
             activityType: activity.activityType,
@@ -25,12 +26,22 @@ export const useActivityMapper = () => {
             project: activity.project,
             isArchived: activity.isArchived,
             generalRemark: activity.generalRemark,
-            actualStartDate: activity.actualStartDate,
-            actualFinishDate: activity.actualFinishDate,
-            absoluteWorkload: activity.absoluteWorkload,
+            actualStartDate: mapDate(activity.actualStartDate),
+            actualFinishDate: mapDate(activity.actualFinishDate),
+            absoluteWorkload: parseTimeSpan(activity.absoluteWorkload),
             delegator: engineerMapper.mapEngineer(activity.delegator),
             engineer: engineerMapper.mapEngineer(activity.engineer),
         } as ProjectActivity;
+    }
+
+    const mapDate = (date?: string): Date | undefined => {
+        if (!date) return undefined;
+        const parsedDate = new Date(date);
+        if (isNaN(parsedDate.getTime())) {
+            console.error(`Invalid date format: ${date}`);
+            return undefined;
+        }
+        return parsedDate;
     }
 
     return {
