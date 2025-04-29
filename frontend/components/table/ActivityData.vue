@@ -5,6 +5,7 @@ import type { WorkCenter } from '~/types/WorkCenter';
 import Popover from "primevue/popover";
 
 const { formatDate } = useUtil();
+const bulkStore = useBulkStore();
 const props = defineProps<{
     activities: ProjectActivity[];
 }>();
@@ -48,10 +49,22 @@ const getClassName = (string: string | undefined) => {
 }
 
 const getActivityClasses = (activity: ProjectActivity) => {
-    let classes = [getClassName(activity.network)];
+    let classes = [
+        getClassName(activity.network),
+        getClassName('KEY:'+activity.key),
+    ];
 
     return classes.join(' ');
 };
+
+onMounted(() => {
+    props.activities.forEach((activity) => {
+        const element = document.querySelector<HTMLElement>(`.${getClassName('KEY:'+activity.key)}`);
+        if (element) element.addEventListener('mouseenter', () => {
+            bulkStore.hoverActivity(activity);
+        })
+    });
+})
 </script>
 
 <template>
@@ -67,24 +80,25 @@ const getActivityClasses = (activity: ProjectActivity) => {
         :sort-order="-1"
         row-group-mode="subheader"
         group-rows-by="network"
+        :class="{'disable-selection': bulkStore.isSelecting}"
     >
         <Column field="network" header="Network"></Column>
         <Column field="workBreakdownStructure" header="WBS" style="width: 210px"></Column>
         <Column field="id" header="Activity" style="width: 80px"></Column>
-        <Column field="latestStartDate" header="Latest Start Date" style="min-width: 150px" >
+        <Column field="latestStartDate" header="Latest Start Date" style="min-width: 180px" >
             <template #body="slotProps">
                 <DateAssignment
-                    :activity-key="slotProps.data.key"
+                    :activity="slotProps.data"
                     :default-date="slotProps.data.latestStartDate"
                     :override-date="slotProps.data.actualStartDate"
                     assign-as="actualStartDate"
                 ></DateAssignment>
             </template>
         </Column>
-        <Column field="latestFinishDate" header="Latest Finish Date" style="min-width: 150px">
+        <Column field="latestFinishDate" header="Latest Finish Date" style="min-width: 180px">
             <template #body="slotProps">
                 <DateAssignment
-                    :activity-key="slotProps.data.key"
+                    :activity="slotProps.data"
                     :default-date="slotProps.data.latestFinishDate"
                     :override-date="slotProps.data.actualFinishDate"
                     assign-as="actualFinishDate"
@@ -128,7 +142,7 @@ const getActivityClasses = (activity: ProjectActivity) => {
         <Column field="delegator" header="Delegator" style="width: 120px">
             <template #body="slotProps">
                 <EngineerAssignment
-                    :activity-key="slotProps.data.key"
+                    :activity="slotProps.data"
                     assign-as="delegator"
                     :current="slotProps.data.delegator"
                 >
@@ -138,7 +152,7 @@ const getActivityClasses = (activity: ProjectActivity) => {
         <Column field="engineer" header="Engineer" style="width: 120px">
             <template #body="slotProps">
                 <EngineerAssignment
-                    :activity-key="slotProps.data.key"
+                    :activity="slotProps.data"
                     assign-as="engineer"
                     :current="slotProps.data.engineer"
                 >
@@ -189,5 +203,9 @@ const getActivityClasses = (activity: ProjectActivity) => {
     gap: 0.5rem;
     max-height: 300px;
     overflow-y: auto;
+}
+
+.disable-selection {
+    user-select: none;
 }
 </style>

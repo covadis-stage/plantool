@@ -4,13 +4,13 @@ import type { Project } from "~/types/Project";
 export const useProjectStore = defineStore("ProjectStore", () => {
     const projectMapper = useProjectMapper();
     const activitiesMapper = useActivityMapper();
-    const { loading, get } = useApi();
+    const api = useApi();
 
     const projects = ref<Project[]>([]);
 
     const getProjects = async () => {
         try {
-            const response = await get('Projects');
+            const response = await api.get('Projects');
             projects.value = projectMapper.mapProjects(response);
             if (!response) return [];
             return projects.value;
@@ -28,7 +28,7 @@ export const useProjectStore = defineStore("ProjectStore", () => {
             if (!project) return []
             if (project.activities && project.activities.length > 0) return project.activities
 
-            const response = await get(`Activities/project/${projectKey}`);
+            const response = await api.get(`Activities/project/${projectKey}`);
             if (!response) return [];
 
             const activities = activitiesMapper.mapActivities(response);
@@ -69,7 +69,7 @@ export const useProjectStore = defineStore("ProjectStore", () => {
     }
 
     return {
-        loading,
+        loading: computed(() => api.loading),
         projects,
         getProjects,
         getActivitiesForProject,

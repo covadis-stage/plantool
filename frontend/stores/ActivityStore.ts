@@ -1,11 +1,29 @@
+import type { ProjectActivity } from "~/types/Activity";
+import type { Engineer } from "~/types/Engineer";
 
 export const useActivityStore = defineStore("ActivityStore", () => {
-    const { loading, put, del } = useApi();
+    const api = useApi();
     const { getDateAsISOString } = useUtil();
+
+    const setOnActivities = async (activites: ProjectActivity[], toSet: keyof ProjectActivity, value: ProjectActivity[keyof ProjectActivity]) => {
+        if (activites.length === 0) return false;
+        let activityKeys: string[] = activites.map(a => a.key);
+        if (value === undefined) {
+            if (["delegator", "engineer", "actualStartDate", "actualFinishDate"].includes(toSet)) {
+                return bulkDelete(activityKeys, toSet as "delegator" | "engineer" | "actualStartDate" | "actualFinishDate");
+            }
+            return false;
+        }
+        if (toSet === "delegator") return setDelegatorOnActivities(activityKeys, (value as Engineer).id);
+        if (toSet === "engineer") return setEngineerOnActivities(activityKeys, (value as Engineer).id);
+        if (toSet === "actualStartDate") return setActualStartDateOnActivities(activityKeys, value as Date);
+        if (toSet === "actualFinishDate") return setActualFinishDateOnActivities(activityKeys, value as Date);
+        return false;
+    }
 
     const setDelegatorOnActivities = async (activities: string[], delegatorId: string) => {
         try {
-            await put('Activities/bulk-update', {
+            await api.put('Activities/bulk-update', {
                 activityKeys: activities,
                 delegatorId: delegatorId,
             })
@@ -18,7 +36,7 @@ export const useActivityStore = defineStore("ActivityStore", () => {
 
     const setEngineerOnActivities = async (activities: string[], engineerId: string) => {
         try {
-            await put('Activities/bulk-update', {
+            await api.put('Activities/bulk-update', {
                 activityKeys: activities,
                 engineerId: engineerId,
             })
@@ -31,7 +49,7 @@ export const useActivityStore = defineStore("ActivityStore", () => {
 
     const setActualStartDateOnActivities = async (activities: string[], actualStartDate: Date) => {
         try {
-            await put('Activities/bulk-update', {
+            await api.put('Activities/bulk-update', {
                 activityKeys: activities,
                 actualStartDate: getDateAsISOString(actualStartDate),
             })
@@ -45,7 +63,7 @@ export const useActivityStore = defineStore("ActivityStore", () => {
 
     const setActualFinishDateOnActivities = async (activities: string[], actualFinishDate: Date) => {
         try {
-            await put('Activities/bulk-update', {
+            await api.put('Activities/bulk-update', {
                 activityKeys: activities,
                 actualFinishDate: getDateAsISOString(actualFinishDate),
             })
@@ -59,7 +77,7 @@ export const useActivityStore = defineStore("ActivityStore", () => {
 
     const bulkDelete = async (activities: string[], toDelete: "delegator" | "engineer" | "actualStartDate" | "actualFinishDate") => {
         try {
-            await del('Activities/bulk-delete', {
+            await api.del('Activities/bulk-delete', {
                 activityKeys: activities,
                 [toDelete]: true,
             })
@@ -71,7 +89,8 @@ export const useActivityStore = defineStore("ActivityStore", () => {
     }
 
     return {
-        loading,
+        loading: computed(() => api.loading),
+        setOnActivities,
         setDelegatorOnActivities,
         setEngineerOnActivities,
         setActualStartDateOnActivities,
