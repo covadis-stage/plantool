@@ -37,7 +37,7 @@ export const useApi = () => {
         return json;
     }
 
-    const put = async (url: string, body: any) => {
+    const put = async (url: string, body?: any) => {
         loading.value = true;
         if (!apiUrl) throw new Error('API URL is not defined in the environment variables.');
         const response = await fetch(`${apiUrl}/${url}`, {
@@ -46,7 +46,7 @@ export const useApi = () => {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
-            body: JSON.stringify(body),
+            body: body === undefined ? undefined : JSON.stringify(body),
         });
         if (!response.ok) throw new Error(`Error during PUT: ${response.statusText}`);
         const json = await response.json();

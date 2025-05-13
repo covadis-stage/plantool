@@ -86,6 +86,18 @@ onMounted(() => {
             header="Network"
         ></Column>
         <Column
+            field="generalRemark"
+            header="Note"
+            frozen
+        >
+            <template #body="slotProps">
+                <GeneralRemarkButton
+                    :activity="slotProps.data"
+                    :remark="slotProps.data.generalRemark"
+                ></GeneralRemarkButton>
+            </template>
+        </Column>
+        <Column
             field="workBreakdownStructure"
             header="WBS"
             style="min-width: 200px"

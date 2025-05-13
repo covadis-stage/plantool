@@ -5,6 +5,18 @@ export const useActivityStore = defineStore("ActivityStore", () => {
     const api = useApi();
     const { getDateAsISOString } = useUtil();
 
+    const setGeneralRemark = async (activityKey: string, remark: string | undefined) => {
+        try {
+            await api.put(`Activities/${activityKey}/general-remark?generalRemark=${remark}`);
+            return true
+        } catch (err) {
+            console.error(err);
+            return false
+        }
+    }
+
+    // BULK ACTIONS:
+
     const setOnActivities = async (activites: ProjectActivity[], toSet: keyof ProjectActivity, value: ProjectActivity[keyof ProjectActivity]) => {
         if (activites.length === 0) return false;
         let activityKeys: string[] = activites.map(a => a.key);
@@ -90,6 +102,7 @@ export const useActivityStore = defineStore("ActivityStore", () => {
 
     return {
         loading: computed(() => api.loading),
+        setGeneralRemark,
         setOnActivities,
         setDelegatorOnActivities,
         setEngineerOnActivities,
