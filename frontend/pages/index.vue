@@ -7,7 +7,7 @@
         <h1>Index</h1>
         <NuxtLink to="health-check">health check</NuxtLink>
     </Container>
-    <ActivityTable />
+    <ProjectList />
 </template>
 
 <style lang="scss" scoped>

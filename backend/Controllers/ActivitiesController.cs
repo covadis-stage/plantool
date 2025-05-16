@@ -14,6 +14,15 @@ public class ActivitiesController : ControllerBase
     public ActivitiesController(ILogger<ActivitiesController> logger, ActivitiesService activitiesService) =>
         (_logger, _activitiesService) = (logger, activitiesService);
 
+    [HttpPut("{activityKey}/general-remark")]
+    public async Task<IActionResult> SetGeneralRemark(string activityKey, [FromQuery] string generalRemark)
+    {
+        if (string.IsNullOrWhiteSpace(activityKey)) return BadRequest("Invalid activity key.");
+
+        var result = await _activitiesService.SetGeneralRemark(activityKey, generalRemark);
+        return result ? Ok("Remark updated successfully.") : NotFound("Activity not found.");
+    }
+
     [HttpGet("project/{projectKey}")]
     public async Task<IActionResult> GetActivitiesByProjectKey(string projectKey)
     {
