@@ -9,9 +9,10 @@ public class ActivitiesService
 {
     private readonly PlantoolDbContext _dbContext;
     private readonly ILogger<ActivitiesService> _logger;
+    private readonly IActivityNotifier _activityNotifier;
 
-    public ActivitiesService(PlantoolDbContext dbContext, ILogger<ActivitiesService> logger) =>
-        (_dbContext, _logger) = (dbContext, logger);
+    public ActivitiesService(PlantoolDbContext dbContext, ILogger<ActivitiesService> logger, IActivityNotifier activityNotifier) =>
+        (_dbContext, _logger, _activityNotifier) = (dbContext, logger, activityNotifier);
 
     public async Task<List<ProjectActivity>> GetActivitiesByProjectKeyAsync(string projectKey) =>
         await _dbContext.Activities
@@ -39,6 +40,8 @@ public class ActivitiesService
             .Where(activity => request.ActivityKeys.Contains(activity.Key))
             .ToListAsync();
 
+        var changedProperties = request.FindProperties();
+
         foreach (var activity in activities)
         {
             if (request.DelegatorId != null)
@@ -52,6 +55,11 @@ public class ActivitiesService
 
             if (request.ActualStartDate != null)
                 activity.ActualStartDate = request.ActualStartDate.Value;
+
+            foreach (var property in changedProperties)
+            {
+                await _activityNotifier.NotifyActivityUpdate(activity.Key, property.Key, property.Value);
+            }
         }
 
         await _dbContext.SaveChangesAsync();
@@ -62,6 +70,8 @@ public class ActivitiesService
         var activities = await _dbContext.Activities
             .Where(activity => request.ActivityKeys.Contains(activity.Key))
             .ToListAsync();
+
+        var changedProperties = request.FindProperties();
 
         foreach (var activity in activities)
         {
@@ -76,6 +86,11 @@ public class ActivitiesService
 
             if (request.ActualStartDate == true)
                 activity.ActualStartDate = null;
+
+            foreach (var property in changedProperties)
+            {
+                await _activityNotifier.NotifyActivityUpdate(activity.Key, property, null);
+            }
         }
 
         await _dbContext.SaveChangesAsync();

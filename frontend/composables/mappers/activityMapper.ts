@@ -4,6 +4,7 @@ import { parseTimeSpan } from "~/types/TimeSpan";
 
 export const useActivityMapper = () => {
     const engineerMapper = useEngineerMapper();
+    const { mapDate } = useUtil();
 
     const mapActivities = (activities: any[]): ProjectActivity[] => {
         return activities.map(activity => mapActivity(activity));
@@ -32,16 +33,6 @@ export const useActivityMapper = () => {
             delegator: engineerMapper.mapEngineer(activity.delegator),
             engineer: engineerMapper.mapEngineer(activity.engineer),
         } as ProjectActivity;
-    }
-
-    const mapDate = (date?: string): Date | undefined => {
-        if (!date) return undefined;
-        const parsedDate = new Date(date);
-        if (isNaN(parsedDate.getTime())) {
-            console.error(`Invalid date format: ${date}`);
-            return undefined;
-        }
-        return parsedDate;
     }
 
     return {

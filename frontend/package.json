@@ -11,6 +11,7 @@
     "start": "node .output/server/index.mjs"
   },
   "dependencies": {
+    "@microsoft/signalr": "^8.0.7",
     "@pinia/nuxt": "^0.10.1",
     "@primeuix/themes": "^1.0.0",
     "@primevue/forms": "^4.3.3",

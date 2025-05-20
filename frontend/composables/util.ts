@@ -23,8 +23,19 @@ export const useUtil = () => {
         return [year, month, day].join('-');
     }
 
+    const mapDate = (date?: string): Date | undefined => {
+        if (!date) return undefined;
+        const parsedDate = new Date(date);
+        if (isNaN(parsedDate.getTime())) {
+            console.error(`Invalid date format: ${date}`);
+            return undefined;
+        }
+        return parsedDate;
+    }
+
     return {
         formatDate,
         getDateAsISOString,
+        mapDate,
     }
 }

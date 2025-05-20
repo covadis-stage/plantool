@@ -1,3 +1,4 @@
+using plantool.Presentation.SignalR;
 using plantool.Services.Activities;
 using plantool.Services.Csv;
 using plantool.Services.Engineers;
@@ -17,5 +18,6 @@ public static class DependencyInjector
         services.AddScoped<ActivitiesService>();
         services.AddScoped<SeederService>();
         services.AddScoped<EngineersService>();
+        services.AddScoped<IActivityNotifier, ActivityNotifier>();
     }
 }
