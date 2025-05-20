@@ -7,7 +7,9 @@ export const useActivityStore = defineStore("ActivityStore", () => {
 
     const setGeneralRemark = async (activityKey: string, remark: string | undefined) => {
         try {
-            await api.put(`Activities/${activityKey}/general-remark?generalRemark=${remark}`);
+            let url = `Activities/${activityKey}/general-remark`;
+            if (remark) url += `?generalRemark=${remark}`;
+            await api.put(url);
             return true
         } catch (err) {
             console.error(err);

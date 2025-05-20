@@ -15,7 +15,7 @@ public class ActivitiesController : ControllerBase
         (_logger, _activitiesService) = (logger, activitiesService);
 
     [HttpPut("{activityKey}/general-remark")]
-    public async Task<IActionResult> SetGeneralRemark(string activityKey, [FromQuery] string generalRemark)
+    public async Task<IActionResult> SetGeneralRemark(string activityKey, [FromQuery] string? generalRemark)
     {
         if (string.IsNullOrWhiteSpace(activityKey)) return BadRequest("Invalid activity key.");
 

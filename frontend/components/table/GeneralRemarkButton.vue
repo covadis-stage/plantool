@@ -25,7 +25,7 @@ const save = async () => {
     let result = await activityStore.setGeneralRemark(props.activity.key, writtenRemark.value?.trim());
     let message = "Remark saved";
     if (!result) message = "Could not save remark, please try again";
-    if (writtenRemark.value == undefined) message = "Remark removed successfully";
+    if (result && writtenRemark.value == undefined) message = "Remark removed successfully";
     toast.add({
         severity: result ? 'success' : 'error',
         summary: result ? 'Success' : 'Error',
