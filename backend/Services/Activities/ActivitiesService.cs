@@ -25,13 +25,15 @@ public class ActivitiesService
         .ToListAsync();
 
 
-// will this delete remarks when null?
+    // will this delete remarks when null?
     public async Task<bool> SetGeneralRemark(string activityKey, string? remark)
     {
         var activity = await _dbContext.Activities.FindAsync(activityKey) ?? throw new InvalidOperationException($"Activity with key '{activityKey}' not found.");
         activity.GeneralRemark = remark;
         _dbContext.Entry(activity).State = EntityState.Modified;
-        return await _dbContext.SaveChangesAsync() > 0;
+        var result = await _dbContext.SaveChangesAsync() > 0;
+        if (result) await _activityNotifier.NotifyActivityUpdate(activityKey, nameof(activity.GeneralRemark), remark);
+        return result;
     }
 
     public async Task BulkUpdate(BulkUpdateRequest request)
