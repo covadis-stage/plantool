@@ -9,7 +9,9 @@ export const useUpdateRequestMapper = () => {
     const mapKey = (backendKey: string): UpdateRequestKey | null => {
         const keyMap: Record<string, UpdateRequestKey> = {
             DelegatorId: "delegator",
+            Delegator: "delegator",
             EngineerId: "engineer",
+            Engineer: "engineer",
             ActualFinishDate: "actualFinishDate",
             ActualStartDate: "actualStartDate",
             GeneralRemark: "generalRemark",

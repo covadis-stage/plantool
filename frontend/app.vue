@@ -12,8 +12,6 @@ onMounted(() => {
 
     realtime.startConnection();
     realtime.onActivityUpdate((activityKey, key, value) => {
-        console.log('activity update', activityKey, key, value);
-
         let mappedKey = updateRequestMapper.mapKey(key);
         if (mappedKey == null) return;
         let mappedValue = updateRequestMapper.mapValue(mappedKey, value);

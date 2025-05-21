@@ -16,7 +16,9 @@ const isLoading = ref(false);
 
 const engineerId = ref<string>(props.current?.id ?? '');
 const selectedEngineer = computed(() => {
-    if (props.assignAs === "delegator") {
+    if (engineerId.value == null || engineerId.value == '') {
+        return null;
+    } else if (props.assignAs === "delegator") {
         return engineerStore.delegators.find((engineer) => engineer.id === engineerId.value);
     } else if (props.assignAs === "engineer") {
         return engineerStore.engineers.find((engineer) => engineer.id === engineerId.value);
@@ -44,6 +46,9 @@ onMounted(() => {
 })
 
 watchEffect(() => {
+    if(props.activity.key == "P.0021446-P.0021446.82-0020") {
+        console.log("engineerId", props.current?.id);
+    }
     if (props.current) {
         engineerId.value = props.current.id;
     } else {
